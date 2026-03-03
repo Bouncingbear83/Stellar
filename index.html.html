@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STELLAR — Portfolio Command</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #050508;
+    --deep: #0a0b12;
+    --surface: #10121a;
+    --panel: #141620;
+    --border: #1e2230;
+    --border-bright: #2a2f45;
+    --text: #c8cde0;
+    --text-dim: #5a6080;
+    --text-mid: #8a90a8;
+    --green: #2ecc71;
+    --green-dim: #1a4d31;
+    --amber: #f39c12;
+    --amber-dim: #4d3510;
+    --red: #e74c3c;
+    --red-dim: #4d1a15;
+    --accent: #4f7fff;
+    --accent-dim: #1a2a5e;
+    --gold: #f0c040;
+    --gold-dim: #3d2e08;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Star field background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 15%, rgba(200,210,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 60%, rgba(200,210,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 45% 25%, rgba(200,210,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 80%, rgba(200,210,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 40%, rgba(200,210,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 92% 70%, rgba(200,210,255,0.2) 0%, transparent 100%),
+      radial-gradient(1px 1px at 5% 85%, rgba(200,210,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 60% 50%, rgba(200,210,255,0.2) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app { position: relative; z-index: 1; }
+
+  /* ── HEADER ── */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    background: rgba(5,5,8,0.95);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: 0.12em;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-star {
+    width: 20px; height: 20px;
+    background: conic-gradient(from 0deg, var(--accent), var(--gold), var(--accent));
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    animation: spin 20s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .aum-display {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    color: var(--text-mid);
+  }
+
+  .aum-display span { color: var(--gold); font-weight: 700; }
+
+  .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* ── NAV TABS ── */
+  .tab-nav {
+    display: flex;
+    gap: 2px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0;
+  }
+
+  .tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-bottom: none;
+    color: var(--text-dim);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: transparent;
+    transition: all 0.2s;
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    bottom: -1px;
+  }
+
+  .tab:hover { color: var(--text-mid); border-color: var(--border); background: var(--surface); }
+
+  .tab.active {
+    color: var(--accent);
+    border-color: var(--border);
+    background: var(--surface);
+    border-bottom-color: var(--surface);
+  }
+
+  /* ── PANELS ── */
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface);
+  }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-mid);
+  }
+
+  .card-body { padding: 16px; }
+
+  /* ── RAG BADGES ── */
+  .rag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .rag-green { background: var(--green-dim); color: var(--green); border: 1px solid rgba(46,204,113,0.3); }
+  .rag-amber { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(243,156,18,0.3); }
+  .rag-red { background: var(--red-dim); color: var(--red); border: 1px solid rgba(231,76,60,0.3); }
+  .rag-blue { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(79,127,255,0.3); }
+
+  /* ── TRIGGER ROWS ── */
+  .trigger-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+  }
+
+  .trigger-row:last-child { border-bottom: none; }
+
+  .trigger-name {
+    flex: 1;
+    font-size: 12px;
+    color: var(--text);
+  }
+
+  .trigger-meta {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+
+  /* ── WATCHLIST TABLE ── */
+  table { width: 100%; border-collapse: collapse; }
+
+  th {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    vertical-align: middle;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .ticker { font-weight: 700; color: #fff; font-size: 13px; }
+  .num { font-variant-numeric: tabular-nums; }
+  .dim { color: var(--text-dim); }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 1s ease;
+  }
+
+  /* ── LAYER WEIGHTS ── */
+  .layer-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .layer-row:last-child { border-bottom: none; }
+
+  .layer-name {
+    width: 100px;
+    font-size: 11px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-mid);
+  }
+
+  .layer-bar-wrap { flex: 1; position: relative; }
+
+  .layer-numbers {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* ── CHAT INTERFACE ── */
+  .chat-wrap {
+    display: flex;
+    flex-direction: column;
+    height: 580px;
+  }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .chat-messages::-webkit-scrollbar { width: 4px; }
+  .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .msg {
+    display: flex;
+    gap: 12px;
+    max-width: 85%;
+  }
+
+  .msg.user { flex-direction: row-reverse; align-self: flex-end; }
+
+  .msg-avatar {
+    width: 32px; height: 32px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-family: 'Syne', sans-serif;
+  }
+
+  .msg.ai .msg-avatar { background: var(--accent-dim); color: var(--accent); }
+  .msg.user .msg-avatar { background: var(--gold-dim); color: var(--gold); }
+
+  .msg-bubble {
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .msg.ai .msg-bubble {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .msg.user .msg-bubble {
+    background: var(--accent-dim);
+    border: 1px solid rgba(79,127,255,0.3);
+    color: var(--text);
+  }
+
+  .msg-bubble p { margin-bottom: 8px; }
+  .msg-bubble p:last-child { margin-bottom: 0; }
+
+  .msg-bubble strong { color: #fff; }
+
+  .msg-bubble .rag { margin: 2px 0; }
+
+  .msg-bubble ul { list-style: none; padding-left: 0; }
+  .msg-bubble li { padding: 4px 0; padding-left: 16px; position: relative; }
+  .msg-bubble li::before { content: '→'; position: absolute; left: 0; color: var(--accent); }
+
+  .msg-bubble .table-mini {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0;
+    font-size: 12px;
+  }
+
+  .msg-bubble .table-mini th {
+    color: var(--text-dim);
+    padding: 4px 8px;
+    text-align: left;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .msg-bubble .table-mini td {
+    padding: 5px 8px;
+    border-top: 1px solid var(--border);
+  }
+
+  .typing-indicator {
+    display: flex;
+    gap: 4px;
+    padding: 4px 0;
+  }
+
+  .typing-dot {
+    width: 6px; height: 6px;
+    background: var(--text-dim);
+    border-radius: 50%;
+    animation: typing 1.2s ease-in-out infinite;
+  }
+
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes typing {
+    0%, 100% { opacity: 0.3; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(-3px); }
+  }
+
+  .chat-input-wrap {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .chat-input-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+
+  .chat-input {
+    flex: 1;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    resize: none;
+    min-height: 44px;
+    max-height: 120px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .chat-input:focus { border-color: var(--accent); }
+  .chat-input::placeholder { color: var(--text-dim); }
+
+  .send-btn {
+    background: var(--accent);
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.2s;
+    height: 44px;
+  }
+
+  .send-btn:hover { background: #6b95ff; }
+  .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .quick-prompts {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  .qp {
+    padding: 5px 12px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-size: 11px;
+    color: var(--text-mid);
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    transition: all 0.15s;
+  }
+
+  .qp:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  /* ── STAT CARDS ── */
+  .stat-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  .stat-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* ── HOLDINGS TABLE ── */
+  .score-bar {
+    display: inline-block;
+    height: 3px;
+    border-radius: 2px;
+    vertical-align: middle;
+    margin-left: 6px;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .full-width { grid-column: 1 / -1; }
+
+  /* ── RISK METERS ── */
+  .risk-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .risk-row:last-child { border-bottom: none; }
+  .risk-label { font-size: 11px; color: var(--text); flex: 1; }
+  .risk-thresh { font-size: 10px; color: var(--text-dim); flex: 1; text-align: center; }
+  .risk-status { flex: 0; }
+
+  /* ── ENTRY PRICE INDICATOR ── */
+  .entry-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    position: relative;
+    margin: 6px 0;
+  }
+
+  .entry-target-line {
+    position: absolute;
+    width: 2px;
+    height: 14px;
+    background: var(--green);
+    top: -4px;
+    border-radius: 1px;
+  }
+
+  .entry-current-line {
+    position: absolute;
+    width: 2px;
+    height: 14px;
+    background: var(--amber);
+    top: -4px;
+    border-radius: 1px;
+  }
+
+  /* ── LOADING ── */
+  .loading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-dim);
+    font-size: 12px;
+  }
+
+  .spin-ring {
+    width: 16px; height: 16px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: ring-spin 0.8s linear infinite;
+  }
+
+  @keyframes ring-spin { to { transform: rotate(360deg); } }
+
+  .error-msg {
+    color: var(--red);
+    font-size: 12px;
+    background: var(--red-dim);
+    border: 1px solid rgba(231,76,60,0.3);
+    padding: 8px 12px;
+    border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="logo">
+      <div class="logo-star"></div>
+      STELLAR COMMAND
+    </div>
+    <div class="header-right">
+      <div class="aum-display">AUM <span>~£999k</span></div>
+      <div class="aum-display">Target <span>15–20% pa</span></div>
+      <span id="syncBadge" style="font-size:10px; color:var(--text-dim); max-width:300px; text-align:right; line-height:1.3">Loading…</span>
+      <button onclick="syncFromSheets()" title="Refresh from Google Sheets" style="background:none;border:1px solid var(--border);border-radius:4px;color:var(--text-dim);padding:4px 10px;font-family:inherit;font-size:10px;cursor:pointer;letter-spacing:0.06em">↻ SYNC</button>
+      <div class="status-dot" title="System live"></div>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- NAV TABS -->
+    <div class="tab-nav">
+      <button class="tab active" onclick="switchTab('command')">⚡ Command</button>
+      <button class="tab" onclick="switchTab('monitor')">📡 Monitor</button>
+      <button class="tab" onclick="switchTab('watchlist')">🎯 Watchlist</button>
+      <button class="tab" onclick="switchTab('layers')">🌌 Layers</button>
+      <button class="tab" onclick="switchTab('holdings')">📋 Holdings</button>
+    </div>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- TAB: COMMAND (AI Chat)                     -->
+    <!-- ══════════════════════════════════════════ -->
+    <div id="tab-command" class="tab-content active">
+      <div class="grid-2" style="gap:16px; align-items:start;">
+
+        <!-- Chat panel -->
+        <div class="card" style="grid-column: 1 / 2;">
+          <div class="card-header">
+            <span class="card-title">🌌 Stellar Intelligence</span>
+            <span class="rag rag-blue">CLAUDE SONNET</span>
+          </div>
+          <div class="chat-wrap">
+            <div class="chat-messages" id="chatMessages">
+              <div class="msg ai">
+                <div class="msg-avatar">S</div>
+                <div class="msg-bubble">
+                  <p>Stellar Command is live. I have full context on your £999k portfolio across SIPP + ISA — holdings, layer targets, trigger thresholds, watchlist entries, and all 12 Golden Rules.</p>
+                  <p>Use the quick commands below, or ask anything. Examples:</p>
+                  <ul>
+                    <li><strong>weekly check</strong> — scan markets + flag triggers</li>
+                    <li><strong>monthly review</strong> — full layer weight + concentration check</li>
+                    <li><strong>quarterly review</strong> — cost curves + structural triggers</li>
+                    <li>Or ask anything — <em>"ASML dropped 12%, what do I do?"</em></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="chat-input-wrap">
+              <div class="quick-prompts">
+                <button class="qp" onclick="sendQuick('weekly check')">📊 Weekly check</button>
+                <button class="qp" onclick="sendQuick('monthly review')">📋 Monthly review</button>
+                <button class="qp" onclick="sendQuick('quarterly review')">🔬 Quarterly review</button>
+                <button class="qp" onclick="sendQuick('Run substrate test on all current holdings and flag any that are failing')">⚗️ Substrate audit</button>
+                <button class="qp" onclick="sendQuick('What are the current layer gaps and where should I be deploying capital?')">🎯 Layer gaps</button>
+                <button class="qp" onclick="sendQuick('Which positions are most at risk of reclassification already being complete?')">⚠️ Reclassification check</button>
+              </div>
+              <div class="chat-input-row">
+                <textarea class="chat-input" id="chatInput" placeholder="Ask anything about the Stellar portfolio…" rows="1"
+                  onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+                <button class="send-btn" id="sendBtn" onclick="sendMessage()">SEND</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right column: risk controls + golden rules -->
+        <div style="display:flex; flex-direction:column; gap:16px;">
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">🛡️ Risk Controls</span>
+              <span id="risk-overall" class="rag rag-green">ALL CLEAR</span>
+            </div>
+            <div class="card-body">
+              <div class="risk-row">
+                <div class="risk-label">Top-5 concentration</div>
+                <div class="risk-thresh">Limit: ≤35% AUM</div>
+                <div class="risk-status"><span class="rag rag-green">PASS</span></div>
+              </div>
+              <div class="risk-row">
+                <div class="risk-label">Hedge floor (SGLD+SLVP+Winton+Ruffer)</div>
+                <div class="risk-thresh">Floor: ≥12% AUM</div>
+                <div class="risk-status"><span class="rag rag-green">PASS</span></div>
+              </div>
+              <div class="risk-row">
+                <div class="risk-label">Bio twin-risk (ILMN+TWST)</div>
+                <div class="risk-thresh">Limit: ≤11% AUM</div>
+                <div class="risk-status"><span class="rag rag-amber">WATCH</span></div>
+              </div>
+              <div class="risk-row">
+                <div class="risk-label">Single name max (SGLD)</div>
+                <div class="risk-thresh">Cap: ≤10% AUM</div>
+                <div class="risk-status"><span class="rag rag-amber">WATCH</span></div>
+              </div>
+              <div class="risk-row">
+                <div class="risk-label">Dry powder reserve</div>
+                <div class="risk-thresh">Floor: ≥5% AUM</div>
+                <div class="risk-status"><span class="rag rag-green">PASS</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">⚡ Bubble Flags</span>
+            </div>
+            <div class="card-body">
+              <div class="risk-row">
+                <div style="flex:1">
+                  <div class="risk-label">AI hardware &gt;50× fwd earnings</div>
+                  <div class="trigger-meta">PLTR at 103× — triggered</div>
+                </div>
+                <span class="rag rag-red">TRIGGERED</span>
+              </div>
+              <div class="risk-row">
+                <div style="flex:1">
+                  <div class="risk-label">Substrate theme +100% &lt;12mo</div>
+                  <div class="trigger-meta">GEV +520% since IPO</div>
+                </div>
+                <span class="rag rag-red">TRIGGERED</span>
+              </div>
+              <div class="risk-row">
+                <div style="flex:1">
+                  <div class="risk-label">Portfolio +25% single year</div>
+                  <div class="trigger-meta">Monitor YTD performance</div>
+                </div>
+                <span class="rag rag-amber">MONITOR</span>
+              </div>
+              <div class="risk-row">
+                <div style="flex:1">
+                  <div class="risk-label">Single name &gt;10% AUM</div>
+                  <div class="trigger-meta">SGLD approaching cap</div>
+                </div>
+                <span class="rag rag-amber">WATCH</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">📌 Golden Rules (Quick Ref)</span>
+            </div>
+            <div class="card-body" style="max-height:200px; overflow-y:auto;">
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <div style="font-size:11px; padding:6px 0; border-bottom:1px solid var(--border); color:var(--text)">
+                  <span style="color:var(--accent); font-weight:700;">1.</span> Thesis is the substrate, not the story.
+                </div>
+                <div style="font-size:11px; padding:6px 0; border-bottom:1px solid var(--border); color:var(--text)">
+                  <span style="color:var(--accent); font-weight:700;">2.</span> Winners deserve more capital.
+                </div>
+                <div style="font-size:11px; padding:6px 0; border-bottom:1px solid var(--border); color:var(--text)">
+                  <span style="color:var(--accent); font-weight:700;">3.</span> Losers need a reason to stay.
+                </div>
+                <div style="font-size:11px; padding:6px 0; border-bottom:1px solid var(--border); color:var(--text)">
+                  <span style="color:var(--accent); font-weight:700;">6.</span> Dry powder is a position.
+                </div>
+                <div style="font-size:11px; padding:6px 0; border-bottom:1px solid var(--border); color:var(--text)">
+                  <span style="color:var(--accent); font-weight:700;">9.</span> Themes are consensus. Substrate test is not.
+                </div>
+                <div style="font-size:11px; padding:6px 0; color:var(--text)">
+                  <span style="color:var(--accent); font-weight:700;">12.</span> Reclassification is where the returns are.
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- TAB: MONITOR (Triggers)                   -->
+    <!-- ══════════════════════════════════════════ -->
+    <div id="tab-monitor" class="tab-content">
+      <div class="grid-2">
+
+        <!-- Cost curve metrics -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📉 Cost Curve Metrics (Quarterly)</span>
+            <span class="rag rag-blue">5 METRICS</span>
+          </div>
+          <div class="card-body">
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">Solar LCOE (utility-scale)</div>
+                <div class="trigger-meta">Current: ~$24–33/MWh · AMBER: &lt;$20 · RED: &lt;$15</div>
+                <div class="trigger-meta">→ Impact: NEE, ETN, VRT, FLNC</div>
+              </div>
+              <span class="rag rag-green">NORMAL</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">Li-ion battery pack cost</div>
+                <div class="trigger-meta">Current: ~$108/kWh · AMBER: &lt;$80 · RED: &lt;$60</div>
+                <div class="trigger-meta">→ Impact: FLNC, grid storage thesis</div>
+              </div>
+              <span class="rag rag-green">NORMAL</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">DNA synthesis cost</div>
+                <div class="trigger-meta">Current: ~$0.07/bp · AMBER: &lt;$0.04 · RED: &lt;$0.02</div>
+                <div class="trigger-meta">→ Impact: TWST (watch carefully)</div>
+              </div>
+              <span class="rag rag-amber">WATCH</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">AI inference cost</div>
+                <div class="trigger-meta">Current: ~$3/M tokens · AMBER: &lt;$0.50 · RED: &lt;$0.10</div>
+                <div class="trigger-meta">→ Impact: NVDA, ANET, AVGO</div>
+              </div>
+              <span class="rag rag-amber">WATCH</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">Humanoid robot production</div>
+                <div class="trigger-meta">Current: ~15k units/yr · AMBER: &gt;50k · RED: &gt;200k</div>
+                <div class="trigger-meta">→ Impact: Renishaw, Hexagon, ROBG</div>
+              </div>
+              <span class="rag rag-green">NORMAL</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Structural triggers -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🔩 Structural Triggers (Quarterly)</span>
+            <span class="rag rag-blue">6 TRIGGERS</span>
+          </div>
+          <div class="card-body">
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">S1 — China EUV capability</div>
+                <div class="trigger-meta">→ ASML (£58k, core position)</div>
+              </div>
+              <span class="rag rag-amber">MONITOR</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">S2 — AI drug Phase 3 trial (AI-discovered)</div>
+                <div class="trigger-meta">→ SDGR, RXRX thesis validation</div>
+              </div>
+              <span class="rag rag-green">NORMAL</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">S3 — SSN(X) submarine programme status</div>
+                <div class="trigger-meta">→ BWXT (£32k, dual substrate)</div>
+              </div>
+              <span class="rag rag-green">NORMAL</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">S4 — Kazatomprom Western market access</div>
+                <div class="trigger-meta">→ CCJ, SPUT. Uranium spot &lt;$50/lb = pause</div>
+              </div>
+              <span class="rag rag-amber">MONITOR</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">S5 — New Western uranium mine approval</div>
+                <div class="trigger-meta">→ CCJ thesis reinforcement signal</div>
+              </div>
+              <span class="rag rag-green">NORMAL</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">S6 — Global nuclear fleet closure rate</div>
+                <div class="trigger-meta">→ Entire nuclear sleeve: CCJ, SPUT, BWXT, LEU, OKLO</div>
+              </div>
+              <span class="rag rag-green">NORMAL</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weekly triggers -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📊 Weekly Market Triggers</span>
+          </div>
+          <div class="card-body">
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">S&P 500 intraday drop &gt;5%</div>
+                <div class="trigger-meta">→ Pause all wave execution. Reassess.</div>
+              </div>
+              <span class="rag rag-green">CLEAR</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">S&P 500 rolling 5-day drop &gt;10%</div>
+                <div class="trigger-meta">→ Full portfolio review, consider hedge adds</div>
+              </div>
+              <span class="rag rag-green">CLEAR</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">Uranium spot &lt;$50/lb</div>
+                <div class="trigger-meta">→ CCJ/SPUT thesis review</div>
+              </div>
+              <span class="rag rag-green">CLEAR</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">Copper spot &lt;$3.50/lb</div>
+                <div class="trigger-meta">→ FCX position review</div>
+              </div>
+              <span class="rag rag-green">CLEAR</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">Any holding &gt;10% weekly move</div>
+                <div class="trigger-meta">→ Review thesis immediately</div>
+              </div>
+              <span class="rag rag-green">CLEAR</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Disruption exposure -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🔥 Disruption Exposure (Key Holdings)</span>
+            <span class="rag rag-blue">0–100 RESILIENCE</span>
+          </div>
+          <div class="card-body">
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">Nuclear sleeve (CCJ/SPUT/BWXT/LEU/OKLO)</div>
+                <div class="trigger-meta">Niche-anchored: defence, isotopes, space</div>
+              </div>
+              <span style="font-weight:700; color: var(--amber); font-size:14px;">65</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">Copper (FCX) — core low-disruption</div>
+                <div class="trigger-meta">No credible substitute at scale</div>
+              </div>
+              <span style="font-weight:700; color: var(--green); font-size:14px;">82</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">ASML — China EUV scenario</div>
+                <div class="trigger-meta">Monitor domestic CN progress</div>
+              </div>
+              <span style="font-weight:700; color: var(--amber); font-size:14px;">71</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">FLNC — BESS commoditisation</div>
+                <div class="trigger-meta">HIGH risk — hardware margins compressing</div>
+              </div>
+              <span style="font-weight:700; color: var(--red); font-size:14px;">34</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">ANET — hyperscaler in-house</div>
+                <div class="trigger-meta">Software moat offsets, moderate risk</div>
+              </div>
+              <span style="font-weight:700; color: var(--amber); font-size:14px;">57</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- TAB: WATCHLIST                             -->
+    <!-- ══════════════════════════════════════════ -->
+    <div id="tab-watchlist" class="tab-content">
+      <div class="grid-2">
+
+        <div class="card full-width">
+          <div class="card-header">
+            <span class="card-title">🎯 Price Alert Targets — Do Not Buy Without Trigger</span>
+          </div>
+          <div class="card-body" style="padding:0;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Layer</th>
+                  <th>Entry Target</th>
+                  <th>Trigger Condition</th>
+                  <th>Rationale</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="ticker">GE Vernova</span></td>
+                  <td>Energy</td>
+                  <td class="num">$600–650</td>
+                  <td>15–25% correction</td>
+                  <td>Grid electrification substrate — WAIT on valuation</td>
+                  <td><span class="rag rag-amber">WAIT</span></td>
+                </tr>
+                <tr>
+                  <td><span class="ticker">KTOS</span></td>
+                  <td>Sovereignty</td>
+                  <td class="num">$60–70</td>
+                  <td>Valuation reset</td>
+                  <td>Defence autonomy substrate — same thesis as Rheinmetall, better value needed</td>
+                  <td><span class="rag rag-amber">WAIT</span></td>
+                </tr>
+                <tr>
+                  <td><span class="ticker">ABB Ltd (ABBNY)</span></td>
+                  <td>Energy</td>
+                  <td class="num">$75–80</td>
+                  <td>Industrial rotation</td>
+                  <td>Grid automation infrastructure</td>
+                  <td><span class="rag rag-amber">WAIT</span></td>
+                </tr>
+                <tr>
+                  <td><span class="ticker">CGNX</span></td>
+                  <td>Robotics</td>
+                  <td class="num">$42</td>
+                  <td>23× fwd adjusted P/E (~23% pullback)</td>
+                  <td>Machine vision substrate — overvalued at current 47×</td>
+                  <td><span class="rag rag-amber">WAIT</span></td>
+                </tr>
+                <tr>
+                  <td><span class="ticker">RGEN</span></td>
+                  <td>Biological</td>
+                  <td class="num">$110–120</td>
+                  <td>55× forward P/E</td>
+                  <td>Bioprocessing pure-play — purer than DHR for bio substrate</td>
+                  <td><span class="rag rag-amber">WAIT</span></td>
+                </tr>
+                <tr>
+                  <td><span class="ticker">DHR</span></td>
+                  <td>Biological</td>
+                  <td class="num">~$200</td>
+                  <td>Masimo integration concerns dip</td>
+                  <td>Bioprocessing anchor (Cytiva) — cash-generative infrastructure</td>
+                  <td><span class="rag rag-amber">WATCH</span></td>
+                </tr>
+                <tr>
+                  <td><span class="ticker">Renishaw</span></td>
+                  <td>Robotics</td>
+                  <td class="num">3,800–4,300p</td>
+                  <td>Tranche 1 immediate, T2 at 3,800p</td>
+                  <td>Encoder/metrology substrate — 22× ex-cash P/E vs Harmonic at 264×</td>
+                  <td><span class="rag rag-green">BUY T1</span></td>
+                </tr>
+                <tr>
+                  <td><span class="ticker">Hexagon AB</span></td>
+                  <td>Robotics</td>
+                  <td class="num">SEK 85–99</td>
+                  <td>T1 immediate at SEK 99, T2 at SEK 85</td>
+                  <td>3D sensing / metrology substrate — SEK listed (Stockholm)</td>
+                  <td><span class="rag rag-green">BUY T1</span></td>
+                </tr>
+                <tr>
+                  <td><span class="ticker">Prysmian</span></td>
+                  <td>Energy</td>
+                  <td class="num">TBC</td>
+                  <td>Deep research complete — awaiting entry</td>
+                  <td>HVDC cable substrate — offshore wind / grid interconnectors</td>
+                  <td><span class="rag rag-blue">RESEARCH</span></td>
+                </tr>
+                <tr>
+                  <td><span class="ticker">NKT A/S</span></td>
+                  <td>Energy</td>
+                  <td class="num">TBC</td>
+                  <td>HVDC basket vs Prysmian</td>
+                  <td>€10.2bn backlog — purer HVDC than Prysmian</td>
+                  <td><span class="rag rag-blue">RESEARCH</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🚀 Pre-IPO Watch</span>
+          </div>
+          <div class="card-body">
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">Anduril Industries</div>
+                <div class="trigger-meta">Sovereignty — defence AI hardware. HIGH alignment.</div>
+                <div class="trigger-meta">⚠️ Wait 6–12mo post-IPO. Golden Rule #7.</div>
+              </div>
+              <span class="rag rag-blue">PRE-IPO</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">Shield AI</div>
+                <div class="trigger-meta">Sovereignty — autonomous military systems.</div>
+                <div class="trigger-meta">⚠️ Wait 6–12mo post-IPO.</div>
+              </div>
+              <span class="rag rag-blue">PRE-IPO</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">SpaceX / Starlink</div>
+                <div class="trigger-meta">Sovereignty — orbital substrate. Will re-rate RKLB when filed.</div>
+              </div>
+              <span class="rag rag-blue">PRE-IPO</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">Figure AI</div>
+                <div class="trigger-meta">Sovereignty / Robotics. $39B private. Wait for post-IPO discovery.</div>
+              </div>
+              <span class="rag rag-blue">PRE-IPO</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">PsiQuantum</div>
+                <div class="trigger-meta">Compute (quantum). WAIT for hardware milestone proof first.</div>
+              </div>
+              <span class="rag rag-blue">PRE-IPO</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">⚡ Exit Queue (Pending)</span>
+          </div>
+          <div class="card-body">
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">STEM Inc — <span style="color:var(--red)">SIPP</span></div>
+                <div class="trigger-meta">-39%. Subscale. Fails substrate test.</div>
+              </div>
+              <span class="rag rag-red">EXIT</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">ADSK — <span style="color:var(--red)">SIPP</span></div>
+                <div class="trigger-meta">Application layer. Fails substrate test.</div>
+              </div>
+              <span class="rag rag-red">EXIT</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">SNOW — <span style="color:var(--red)">SIPP</span></div>
+                <div class="trigger-meta">-34%. Data warehouse. Application layer.</div>
+              </div>
+              <span class="rag rag-red">EXIT</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">CRWD / PANW — <span style="color:var(--red)">SIPP</span></div>
+                <div class="trigger-meta">Cyber = supporting theme. £29k → Rheinmetall.</div>
+              </div>
+              <span class="rag rag-red">EXIT</span>
+            </div>
+            <div class="trigger-row">
+              <div style="flex:1">
+                <div class="trigger-name">BNTX / LUNR / NVTS / INRG — <span style="color:var(--red)">SIPP</span></div>
+                <div class="trigger-meta">Duplicates + ETF wrapper. All exit.</div>
+              </div>
+              <span class="rag rag-red">EXIT</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- TAB: LAYERS                               -->
+    <!-- ══════════════════════════════════════════ -->
+    <div id="tab-layers" class="tab-content">
+      <div class="grid-2">
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🌌 Layer Weights vs Target</span>
+          </div>
+          <div class="card-body">
+            <div id="layerBars"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📐 Layer Architecture</span>
+          </div>
+          <div class="card-body" style="padding:0;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Layer</th>
+                  <th>Target</th>
+                  <th>Key Holdings</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Compute</strong></td>
+                  <td>22.0%</td>
+                  <td class="dim" style="font-size:11px">NVDA, TSM, ASML, AMAT, AVGO, ANET</td>
+                  <td><span class="rag rag-amber">NVDA ↑</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Energy</strong></td>
+                  <td>15.3%</td>
+                  <td class="dim" style="font-size:11px">CCJ, BWXT, ETN, NEE, VRT, FCX, SPUT</td>
+                  <td><span class="rag rag-green">OK</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Materials</strong></td>
+                  <td>12.6%</td>
+                  <td class="dim" style="font-size:11px">FCX, MP, SLVP, SGLD</td>
+                  <td><span class="rag rag-green">OK</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Biological</strong></td>
+                  <td>20.1%</td>
+                  <td class="dim" style="font-size:11px">TWST, ILMN, MRNA, SDGR, RXRX</td>
+                  <td><span class="rag rag-amber">~15% NOW</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Sovereignty</strong></td>
+                  <td>10.4%</td>
+                  <td class="dim" style="font-size:11px">Rheinmetall, RKLB, BWXT, ASTS, SYM</td>
+                  <td><span class="rag rag-green">OK</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Robotics</strong></td>
+                  <td>9.0%</td>
+                  <td class="dim" style="font-size:11px">Renishaw, Hexagon, Novanta, ROBG</td>
+                  <td><span class="rag rag-red">NEW LAYER</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Hedge</strong></td>
+                  <td>~16%</td>
+                  <td class="dim" style="font-size:11px">SGLD, SLVP, Winton, Ruffer</td>
+                  <td><span class="rag rag-green">OK</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card full-width">
+          <div class="card-header">
+            <span class="card-title">🔬 Layer Gap Analysis</span>
+          </div>
+          <div class="card-body" style="padding:0;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Layer</th>
+                  <th>Gap</th>
+                  <th>Candidates</th>
+                  <th>Priority</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Robotics</strong></td>
+                  <td>New layer — zero position</td>
+                  <td class="dim" style="font-size:11px">Renishaw (T1 NOW), Hexagon (T1 NOW), Novanta, ROBG ETF</td>
+                  <td><span class="rag rag-red">URGENT</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Biological</strong></td>
+                  <td>~15% vs 20.1% target. Gap = ~£50k</td>
+                  <td class="dim" style="font-size:11px">DHR (bioprocessing), RGEN (pure-play at $110), Repligen</td>
+                  <td><span class="rag rag-amber">HIGH</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Energy</strong></td>
+                  <td">GEV missing (valuation). HVDC uncovered.</td>
+                  <td class="dim" style="font-size:11px">GEV ($600-650), Prysmian + NKT basket, ABB ($75-80)</td>
+                  <td><span class="rag rag-amber">MEDIUM</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Compute</strong></td>
+                  <td>NVDA undersized (2.9% vs 6% target)</td>
+                  <td class="dim" style="font-size:11px">NVDA size-up to £60k. No memory/storage yet — MU worth scoring.</td>
+                  <td><span class="rag rag-amber">MEDIUM</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Sovereignty</strong></td>
+                  <td>Light. KTOS pending entry.</td>
+                  <td class="dim" style="font-size:11px">KTOS ($60-70), Shield AI (pre-IPO), Anduril (pre-IPO)</td>
+                  <td><span class="rag rag-green">LOW</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Materials</strong></td>
+                  <td>No rare earth processing diversification</td>
+                  <td class="dim" style="font-size:11px">Lynas (ASX), Energy Fuels (UUUU) — longer term only</td>
+                  <td><span class="rag rag-green">LOW</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- TAB: HOLDINGS                             -->
+    <!-- ══════════════════════════════════════════ -->
+    <div id="tab-holdings" class="tab-content">
+      <div style="display:flex; flex-direction:column; gap:16px;">
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">💼 SIPP Holdings (~£575k)</span>
+            <span class="rag rag-blue">LONG HORIZON</span>
+          </div>
+          <div class="card-body" style="padding:0; overflow-x:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Ticker</th>
+                  <th>Name</th>
+                  <th>Layer</th>
+                  <th>MV £</th>
+                  <th>G/L %</th>
+                  <th>Notes</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="sippTable">
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">💼 ISA Holdings (~£424k)</span>
+            <span class="rag rag-blue">FLEXIBLE WRAPPER</span>
+          </div>
+          <div class="card-body" style="padding:0; overflow-x:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Ticker</th>
+                  <th>Name</th>
+                  <th>Layer</th>
+                  <th>MV £</th>
+                  <th>G/L %</th>
+                  <th>Notes</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="isaTable">
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+// TAB SWITCHING
+// ══════════════════════════════════════
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+// ══════════════════════════════════════
+// LAYER WEIGHT BARS
+// ══════════════════════════════════════
+
+// ══════════════════════════════════════════════════════════════════
+// GOOGLE SHEETS SYNC
+// ══════════════════════════════════════════════════════════════════
+// HOW TO CONNECT YOUR SHEET:
+//   1. Open your Google Sheet → File → Share → Publish to web
+//   2. Choose "Entire Document" and "CSV" format, click Publish
+//   3. Copy the URL — it looks like:
+//      https://docs.google.com/spreadsheets/d/SHEET_ID/pub?output=csv
+//   4. Paste it below as SHEET_URL
+//   5. If you have multiple tabs, use gid= param for each:
+//      ...pub?gid=0&single=true&output=csv      ← Sheet 1
+//      ...pub?gid=123456&single=true&output=csv ← Sheet 2 (find gid in URL when tab is selected)
+
+const SHEET_URL = ''; // ← PASTE YOUR PUBLISHED CSV URL HERE
+
+// Expected sheet column headers (case-insensitive):
+//  SIPP tab:  ticker | name | layer | mv_gbp | gl_pct | notes | action
+//  ISA tab:   ticker | name | layer | mv_gbp | gl_pct | notes | action
+//  LAYERS tab: name | target_pct | current_pct | color
+//  WATCHLIST tab: ticker | layer | entry_target | trigger | rationale | status
+
+// ── Fallback data (used when no sheet connected or fetch fails) ──────────────
+const FALLBACK_SIPP = [
+  { ticker:'CCJ',    name:'Cameco',           layer:'Energy — Nuclear',    mv:'£62,737', gl:'+46.6%', glPos:true,  notes:'Core. Hold.',                          action:'HOLD',    actionClass:'rag-green' },
+  { ticker:'TWST',   name:'Twist Bioscience', layer:'Biological',          mv:'£51,882', gl:'+65.7%', glPos:true,  notes:'DNA synthesis substrate. Core.',        action:'HOLD',    actionClass:'rag-green' },
+  { ticker:'WINTON', name:'Winton Trend',     layer:'Macro Hedge',         mv:'£40,242', gl:'+8.9%',  glPos:true,  notes:'Core anchor.',                         action:'HOLD',    actionClass:'rag-green' },
+  { ticker:'ANET',   name:'Arista Networks',  layer:'Compute',             mv:'£39,134', gl:'-1.9%',  glPos:false, notes:'AI networking. Re-eval size.',          action:'REVIEW',  actionClass:'rag-amber' },
+  { ticker:'NVDA',   name:'NVIDIA',           layer:'Compute',             mv:'£29,060', gl:'-2.6%',  glPos:false, notes:'⚠️ Undersized. Target 6% AUM (~£60k).', action:'SIZE UP', actionClass:'rag-red' },
+  { ticker:'BWXT',   name:'BWX Technologies', layer:'Energy + Sovereignty',mv:'£32,559', gl:'+11.2%', glPos:true,  notes:'Defence-grade nuclear. Dual substrate.',action:'HOLD',    actionClass:'rag-green' },
+  { ticker:'ETN',    name:'Eaton Corp',       layer:'Energy',              mv:'£31,524', gl:'+10.5%', glPos:true,  notes:'Grid electrification hardware.',        action:'HOLD',    actionClass:'rag-green' },
+  { ticker:'NEE',    name:'NextEra Energy',   layer:'Energy',              mv:'£30,967', gl:'+19.2%', glPos:true,  notes:'Grid anchor.',                         action:'HOLD',    actionClass:'rag-green' },
+  { ticker:'AVGO',   name:'Broadcom',         layer:'Compute',             mv:'£31,303', gl:'-16.2%', glPos:false, notes:'AI silicon. Thesis intact.',            action:'HOLD',    actionClass:'rag-green' },
+  { ticker:'TSM',    name:'TSMC',             layer:'Compute',             mv:'£31,134', gl:'+28.7%', glPos:true,  notes:'Core foundry. Geopolitical risk noted.',action:'HOLD',    actionClass:'rag-green' },
+  { ticker:'MRNA',   name:'Moderna',          layer:'Biological',          mv:'£24,370', gl:'+115.8%',glPos:true,  notes:'Trimmed 35%. Platform optionality.',    action:'HOLD',    actionClass:'rag-green' },
+  { ticker:'AMAT',   name:'Applied Materials',layer:'Compute',             mv:'£20,000', gl:'new',    glPos:null,  notes:'Semi equipment. Pairs with ASML.',      action:'HOLD',    actionClass:'rag-green' },
+  { ticker:'SDGR',   name:'Schrödinger',      layer:'Biological',          mv:'£10,000', gl:'new',    glPos:null,  notes:'Molecular simulation substrate.',        action:'HOLD',    actionClass:'rag-green' },
+  { ticker:'BNTX',   name:'BioNTech',         layer:'Biological',          mv:'£17,997', gl:'-1.3%',  glPos:false, notes:'Duplicate mRNA. MRNA already held.',    action:'EXIT',    actionClass:'rag-red', exit:true },
+  { ticker:'FLNC',   name:'Fluence Energy',   layer:'Energy',              mv:'£21,635', gl:'-3.2%',  glPos:false, notes:'BESS. High disruption risk (34/100).',  action:'REVIEW',  actionClass:'rag-amber' },
+  { ticker:'RXRX',   name:'Recursion',        layer:'Biological',          mv:'£6,692',  gl:'-27.7%', glPos:false, notes:'Dataset optionality. Trim to cap.',     action:'TRIM',    actionClass:'rag-amber' },
+  { ticker:'LUNR',   name:'Intuitive Machines',layer:'Sovereignty',        mv:'£13,449', gl:'-2.0%',  glPos:false, notes:'Duplicate space. RKLB primary.',        action:'EXIT',    actionClass:'rag-red', exit:true },
+  { ticker:'NVTS',   name:'Navitas Semi',     layer:'Compute',             mv:'£10,090', gl:'+7.5%',  glPos:true,  notes:'Sub-scale. No substrate position.',     action:'EXIT',    actionClass:'rag-red', exit:true },
+  { ticker:'INRG',   name:'iShares Clean Energy',layer:'ETF',             mv:'£10,386', gl:'+35.6%', glPos:true,  notes:'Own direct. ETF wrapper is lazy capital.',action:'EXIT',  actionClass:'rag-red', exit:true },
+  { ticker:'RUFFER',  name:'WS Ruffer Gold',  layer:'Macro Hedge',         mv:'£7,060',  gl:'+214.2%',glPos:true,  notes:'Exceptional. Hold.',                   action:'HOLD',    actionClass:'rag-green' },
+];
+
+const FALLBACK_ISA = [
+  { ticker:'SGLD',  name:'Invesco Physical Gold', layer:'Materials / Hedge',  mv:'£87,791', gl:'+22.0%', glPos:true,  notes:'Core anchor. Cap at 10% AUM.',         action:'CAP',    actionClass:'rag-amber' },
+  { ticker:'ASML',  name:'ASML Holding',          layer:'Compute',            mv:'£58,130', gl:'+36.5%', glPos:true,  notes:'Only one of its kind. Core.',           action:'HOLD',   actionClass:'rag-green' },
+  { ticker:'VRT',   name:'Vertiv',                layer:'Energy',             mv:'£42,560', gl:'+45.6%', glPos:true,  notes:'AI power infra substrate. Strong.',     action:'HOLD',   actionClass:'rag-green' },
+  { ticker:'FCX',   name:'Freeport-McMoRan',      layer:'Materials + Energy', mv:'£40,000', gl:'new',    glPos:null,  notes:'Copper supercycle. Core. Resilience 82.',action:'HOLD',  actionClass:'rag-green' },
+  { ticker:'RHM',   name:'Rheinmetall AG',        layer:'Sovereignty',        mv:'£30,000', gl:'new',    glPos:null,  notes:'European rearmament substrate.',        action:'HOLD',   actionClass:'rag-green' },
+  { ticker:'MSFT',  name:'Microsoft',             layer:'Compute',            mv:'£30,020', gl:'-23.3%', glPos:false, notes:'Enduring AI moat. Hold.',               action:'HOLD',   actionClass:'rag-green' },
+  { ticker:'SPUT',  name:'Sprott Uranium',        layer:'Energy — Nuclear',   mv:'£27,944', gl:'+9.0%',  glPos:true,  notes:'Nuclear commodity exposure.',           action:'HOLD',   actionClass:'rag-green' },
+  { ticker:'RKLB',  name:'Rocket Lab',            layer:'Sovereignty',        mv:'£26,922', gl:'+53.3%', glPos:true,  notes:'Space infra. Strong.',                  action:'HOLD',   actionClass:'rag-green' },
+  { ticker:'ILMN',  name:'Illumina',              layer:'Biological',         mv:'£29,636', gl:'+10.8%', glPos:true,  notes:'Genomics substrate. Score: 84.',        action:'HOLD',   actionClass:'rag-green' },
+  { ticker:'MP',    name:'MP Materials',          layer:'Materials',          mv:'£20,000', gl:'new',    glPos:null,  notes:'Only Western mine-to-magnet rare earth.',action:'HOLD',  actionClass:'rag-green' },
+  { ticker:'SLVP',  name:'Physical Silver',       layer:'Materials / Hedge',  mv:'£22,708', gl:'+71.1%', glPos:true,  notes:'Hard asset substrate.',                 action:'HOLD',   actionClass:'rag-green' },
+  { ticker:'LEU',   name:'Centrus Energy',        layer:'Energy — Nuclear',   mv:'£17,741', gl:'-27.4%', glPos:false, notes:'Nuclear enrichment. Venture-size.',     action:'MONITOR',actionClass:'rag-amber' },
+  { ticker:'OKLO',  name:'Oklo',                  layer:'Energy — SMR',       mv:'£15,930', gl:'-28.1%', glPos:false, notes:'SMR speculative. Venture-size.',         action:'MONITOR',actionClass:'rag-amber' },
+  { ticker:'ASTS',  name:'AST SpaceMobile',       layer:'Sovereignty',        mv:'£9,756',  gl:'+38.6%', glPos:true,  notes:'Space comms. Speculative. Small.',      action:'HOLD',   actionClass:'rag-green' },
+  { ticker:'RXRX',  name:'Recursion (ISA)',       layer:'Biological',         mv:'£5,444',  gl:'-28.2%', glPos:false, notes:'Combined with SIPP. Trim to cap.',      action:'TRIM',   actionClass:'rag-amber' },
+  { ticker:'SYM',   name:'Symbotic',              layer:'Sovereignty',        mv:'£6,667',  gl:'-35.9%', glPos:false, notes:'Q1 FY26 first GAAP profit. Watch.',     action:'WATCH',  actionClass:'rag-amber' },
+  { ticker:'ISRG',  name:'Intuitive Surgical',    layer:'Biological',         mv:'£6,726',  gl:'-14.2%', glPos:false, notes:'Surgical robotics. Small position.',    action:'HOLD',   actionClass:'rag-green' },
+];
+
+const FALLBACK_LAYERS = [
+  { name: 'Compute',    target: 22.0, current: 21.0, color: '#4f7fff' },
+  { name: 'Energy',     target: 15.3, current: 16.1, color: '#f39c12' },
+  { name: 'Materials',  target: 12.6, current: 13.2, color: '#e67e22' },
+  { name: 'Biological', target: 20.1, current: 15.2, color: '#2ecc71' },
+  { name: 'Sovereignty',target: 10.4, current: 10.8, color: '#9b59b6' },
+  { name: 'Robotics',   target:  9.0, current:  0.0, color: '#e74c3c' },
+  { name: 'Hedge',      target: 16.0, current: 15.8, color: '#95a5a6' },
+];
+
+// ── CSV Parser ───────────────────────────────────────────────────────────────
+function parseCSV(text) {
+  const rows = text.trim().split('\n').map(r => {
+    const cells = [];
+    let cur = '', inQ = false;
+    for (let i = 0; i < r.length; i++) {
+      if (r[i] === '"') { inQ = !inQ; }
+      else if (r[i] === ',' && !inQ) { cells.push(cur.trim()); cur = ''; }
+      else { cur += r[i]; }
+    }
+    cells.push(cur.trim());
+    return cells;
+  });
+  if (rows.length < 2) return [];
+  const headers = rows[0].map(h => h.toLowerCase().replace(/\s+/g,'_'));
+  return rows.slice(1).filter(r => r.some(c => c)).map(r => {
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = r[i] || '');
+    return obj;
+  });
+}
+
+function csvToHoldings(rows) {
+  return rows.map(r => ({
+    ticker:      r.ticker || r.symbol || '',
+    name:        r.name || '',
+    layer:       r.layer || '',
+    mv:          r.mv_gbp || r.mv || '',
+    gl:          r.gl_pct || r.gl || '',
+    glPos:       (r.gl_pct || r.gl || '').startsWith('+') ? true : (r.gl_pct || r.gl || '').startsWith('-') ? false : null,
+    notes:       r.notes || '',
+    action:      (r.action || 'HOLD').toUpperCase(),
+    actionClass: actionToClass((r.action || 'HOLD').toUpperCase()),
+    exit:        (r.action || '').toUpperCase() === 'EXIT',
+  }));
+}
+
+function csvToLayers(rows) {
+  const colorMap = { Compute:'#4f7fff', Energy:'#f39c12', Materials:'#e67e22',
+                     Biological:'#2ecc71', Sovereignty:'#9b59b6', Robotics:'#e74c3c', Hedge:'#95a5a6' };
+  return rows.map(r => ({
+    name:    r.name || '',
+    target:  parseFloat(r.target_pct || r.target || 0),
+    current: parseFloat(r.current_pct || r.current || 0),
+    color:   r.color || colorMap[r.name] || '#888',
+  }));
+}
+
+function actionToClass(a) {
+  if (['HOLD','OK'].includes(a))           return 'rag-green';
+  if (['EXIT','SIZE UP'].includes(a))      return 'rag-red';
+  if (['REVIEW','TRIM','MONITOR','WATCH','CAP'].includes(a)) return 'rag-amber';
+  return 'rag-blue';
+}
+
+// ── Sheet fetch logic ────────────────────────────────────────────────────────
+// We try to fetch three gid tabs: 0 (SIPP), 1 (ISA), 2 (LAYERS)
+// If SHEET_URL is empty or fetch fails, fall back to hardcoded data silently.
+
+let portfolioData = { sipp: FALLBACK_SIPP, isa: FALLBACK_ISA, layers: FALLBACK_LAYERS };
+let sheetsConnected = false;
+
+async function fetchSheetTab(baseUrl, gid) {
+  // Build correct CSV export URL from whatever the user pasted
+  let url = baseUrl.replace('edit#gid=0','').replace(/\/edit.*$/,'').replace(/\/pub.*$/,'');
+  url = url.replace(/\/$/, '');
+  url += `/pub?gid=${gid}&single=true&output=csv`;
+  const resp = await fetch(url, { cache: 'no-store' });
+  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+  return parseCSV(await resp.text());
+}
+
+async function syncFromSheets() {
+  if (!SHEET_URL) {
+    renderAll();
+    updateSyncBadge(false, 'No sheet connected — using built-in data');
+    return;
+  }
+  updateSyncBadge(null, 'Syncing…');
+  try {
+    const [sippRows, isaRows, layerRows] = await Promise.all([
+      fetchSheetTab(SHEET_URL, 0),
+      fetchSheetTab(SHEET_URL, 1),
+      fetchSheetTab(SHEET_URL, 2),
+    ]);
+    if (sippRows.length)  portfolioData.sipp   = csvToHoldings(sippRows);
+    if (isaRows.length)   portfolioData.isa    = csvToHoldings(isaRows);
+    if (layerRows.length) portfolioData.layers = csvToLayers(layerRows);
+    sheetsConnected = true;
+    updateSyncBadge(true, 'Live from Google Sheets · ' + new Date().toLocaleTimeString('en-GB'));
+  } catch(e) {
+    updateSyncBadge(false, 'Sheet error: ' + e.message + ' — showing cached data');
+  }
+  renderAll();
+}
+
+function updateSyncBadge(ok, msg) {
+  const el = document.getElementById('syncBadge');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.color = ok === true ? 'var(--green)' : ok === false ? 'var(--amber)' : 'var(--text-dim)';
+}
+
+// ── Render all dynamic sections ──────────────────────────────────────────────
+function renderAll() {
+  renderLayers();
+  renderHoldingsTable('sippTable', portfolioData.sipp);
+  renderHoldingsTable('isaTable',  portfolioData.isa);
+  updateAUM();
+}
+
+function updateAUM() {
+  const all = [...portfolioData.sipp, ...portfolioData.isa];
+  let total = 0;
+  all.forEach(h => {
+    const n = parseFloat((h.mv||'').replace(/[£,k]/g,''));
+    if (!isNaN(n)) total += (h.mv||'').includes('k') ? n * 1000 : n;
+  });
+  const el = document.getElementById('aumValue');
+  if (el && total > 0) el.textContent = '~£' + (total/1000).toFixed(0) + 'k';
+}
+
+function renderHoldingsTable(id, holdings) {
+  const tbody = document.getElementById(id);
+  if (!tbody) return;
+  tbody.innerHTML = holdings.map(h => `
+    <tr style="opacity:${h.exit ? 0.5 : 1}">
+      <td><span class="ticker">${h.ticker}</span></td>
+      <td>${h.name}</td>
+      <td>${h.layer}</td>
+      <td class="num">${h.mv}</td>
+      <td class="num" style="color:${h.glPos === true ? 'var(--green)' : h.glPos === false ? 'var(--red)' : 'var(--text-dim)'}">${h.gl}</td>
+      <td class="dim" style="font-size:11px">${h.notes}</td>
+      <td><span class="rag ${h.actionClass}">${h.action}</span></td>
+    </tr>`).join('');
+}
+
+function renderLayers() {
+  const wrap = document.getElementById('layerBars');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  portfolioData.layers.forEach(l => {
+    const diff = l.current - l.target;
+    const diffStr = diff >= 0 ? `+${diff.toFixed(1)}%` : `${diff.toFixed(1)}%`;
+    const diffColor = Math.abs(diff) < 1 ? 'var(--green)' : Math.abs(diff) < 3 ? 'var(--amber)' : 'var(--red)';
+    const pct = l.target > 0 ? Math.min((l.current / l.target) * 100, 130) : 0;
+    wrap.innerHTML += `
+      <div class="layer-row">
+        <div class="layer-name">${l.name}</div>
+        <div class="layer-bar-wrap">
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:${pct}%; background:${l.color}; opacity:${l.current === 0 ? 0.3 : 0.85}"></div>
+          </div>
+          <div class="layer-numbers">
+            <span style="color:var(--text-dim)">${l.current.toFixed(1)}% actual</span>
+            <span style="color:${diffColor}">${diffStr} vs ${l.target}% target</span>
+          </div>
+        </div>
+      </div>`;
+  });
+}
+
+// Kick off on load
+syncFromSheets();
+
+// Auto-refresh every 5 minutes if sheet connected
+setInterval(() => { if (SHEET_URL) syncFromSheets(); }, 5 * 60 * 1000);
+
+
+const STELLAR_SYSTEM = `You are Stellar Intelligence — the AI co-pilot for a £999k institutional-grade investment portfolio built around the "Stellar Hypothesis" framework.
+
+PORTFOLIO OVERVIEW:
+- Combined AUM: ~£999k (SIPP ~£575k + ISA ~£424k)
+- Target: 15–20% CAGR
+- Doctrine: Own the irreplaceable physical, digital, and biological substrates upon which the next civilisational layer is being constructed
+
+SIX CIVILISATIONAL LAYERS + TARGET WEIGHTS:
+1. Compute (22%): NVDA, TSM, ASML, AMAT, AVGO, ANET
+2. Energy (15.3%): CCJ, BWXT, ETN, NEE, VRT, FCX, SPUT, FLNC
+3. Materials (12.6%): FCX, MP, SLVP, SGLD
+4. Biological (20.1%): TWST, ILMN, MRNA, SDGR, RXRX — currently ~15%, gap = ~£50k
+5. Sovereignty (10.4%): Rheinmetall, RKLB, BWXT, ASTS, SYM, LUNR
+6. Robotics (9%): Renishaw, Hexagon AB, Novanta, ROBG ETF — NEW LAYER, currently 0%
+7. Hedge (~16%): SGLD, SLVP, Winton, Ruffer Gold
+
+SIPP HOLDINGS: CCJ (£62,737, +46.6%), TWST (£51,882, +65.7%), Winton (£40,242), ANET (£39,134), NVDA (£29,060, UNDERSIZED - target £60k), BWXT (£32,559), ETN (£31,524), NEE (£30,967), AVGO (£31,303), TSM (£31,134), MRNA (£24,370), FLNC (£21,635), AMAT (£20,000 new), SDGR (£10,000 new), BNTX (£17,997 - EXIT), FSLR (£3,512 reduced), NVTS (£10,090 - EXIT), RXRX (£6,692), LUNR (£13,449 - EXIT), INRG (£10,386 - EXIT), Ruffer Gold (£7,060)
+
+ISA HOLDINGS: SGLD (£87,791 - cap at 10%), ASML (£58,130), VRT (£42,560), FCX (£40,000 new), Rheinmetall (£30,000 new), SPUT (£27,944), RKLB (£26,922), MSFT (£30,020), ILMN (£29,636), MP (£20,000 new), SLVP (£22,708), LEU (£17,741), OKLO (£15,930), ASTS (£9,756), RXRX (£5,444), SYM (£6,667), ISRG (£6,726)
+
+RISK CONTROLS:
+- Top-5 concentration: ≤35% AUM
+- Hedge floor (SGLD+SLVP+Winton+Ruffer): ≥12% AUM
+- Bio twin-risk (ILMN+TWST): ≤11% AUM (currently at watch level)
+- Single name cap: ≤10% AUM (SGLD approaching)
+- Dry powder: ≥5% AUM always
+
+WATCHLIST ENTRY TARGETS (do not buy above):
+- GEV: $600-650 (currently ~$840 — WAIT)
+- KTOS: $60-70 (currently ~$85 — WAIT)
+- ABB (ABBNY): $75-80 (currently ~$90 — WAIT)
+- CGNX: $42 (currently ~$47 — WAIT, 23% pullback needed)
+- RGEN: $110-120 (bioprocessing pure-play)
+- Renishaw (RSW): 3,800-4,300p (Tranche 1 deployable NOW)
+- Hexagon AB: SEK 85-99 (Tranche 1 deployable NOW, Stockholm listed)
+
+EXIT QUEUE: STEM, ADSK, DVN, ZBRA, DNA (Ginkgo), SNOW, CRWD, PANW, BNTX, LUNR, NVTS, INRG, SolarWindow
+
+DISRUPTION SCORES (0-100, higher = more resilient):
+- Copper (FCX): 82 — core, low disruption
+- ASML: 71 — China EUV risk monitored
+- Nuclear sleeve: 65 — niche-anchored (defence, isotopes)
+- ANET: 57 — moderate, hyperscaler in-house risk
+- NEE: 55 — moderate
+- FLNC: 34 — HIGH risk, hardware commoditising
+
+COST CURVE THRESHOLDS (quarterly):
+- Solar LCOE: AMBER <$20/MWh, RED <$15
+- Battery $/kWh: AMBER <$80, RED <$60
+- DNA synthesis $/bp: AMBER <$0.04, RED <$0.02 (WATCH — TWST impact)
+- AI inference $/M tokens: AMBER <$0.50, RED <$0.10
+- Humanoid production: AMBER >50k/yr, RED >200k/yr
+
+STRUCTURAL TRIGGERS:
+- S1: China EUV → ASML
+- S2: AI drug Phase 3 → SDGR/RXRX
+- S3: SSN(X) submarine → BWXT
+- S4: Kazatomprom access → CCJ/SPUT
+- S5: New Western uranium mine → CCJ
+- S6: Nuclear fleet closures → full nuclear sleeve
+
+WEEKLY CHECK: Search for S&P, Nasdaq, VIX levels; uranium spot (<$50/lb trigger); copper spot (<$3.50/lb trigger); any holdings with >10% weekly move. Compare against triggers. Output RAG status.
+
+MONTHLY REVIEW: Weekly check + bottom-3 rescore + layer weight check vs targets + concentration limits + hedge floor + bio twin-risk + watchlist prices.
+
+QUARTERLY REVIEW: Monthly + all 5 cost-curve metrics + all 6 structural triggers + thesis validation for all positions.
+
+GOLDEN RULES:
+1. Thesis is the substrate, not the story
+2. Winners deserve more capital (NVDA at 2.9% was the failure case)
+3. Losers need a reason to stay
+4. Concentration is fine; concentration without understanding is not
+5. Bubbles kill returns
+6. Dry powder is a position (5% always)
+7. IPOs: watch 6-12mo first
+8. Review worst performers monthly
+9. Themes are consensus; substrate test is not
+10. Size matches conviction
+11. Test the substrate, not the story
+12. Reclassification is where the returns are
+
+SUBSTRATE TEST: "Is this the thing without which the next layer cannot be built?" Applications, services, and beneficiaries fail the test.
+
+SCORING: 80-100 = Core conviction (4-7% AUM), 60-79 = Hold and monitor (2-4%), 40-59 = Reduce (≤2%), <40 = Exit
+
+OPERATOR STYLE: Be direct, decisive, structured. Use tables/bullet points. Call out naïve assumptions. Give recommendations, not explorations. British spelling. No corporate filler.`;
+
+let chatHistory = [];
+let isLoading = false;
+
+function addMessage(role, html) {
+  const messages = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  const avatar = role === 'ai' ? 'S' : 'B';
+  div.innerHTML = `
+    <div class="msg-avatar">${avatar}</div>
+    <div class="msg-bubble">${html}</div>
+  `;
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+  return div;
+}
+
+function formatResponse(text) {
+  // Convert markdown-ish to HTML
+  text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+  // Tables
+  text = text.replace(/\|(.+)\|/g, (line) => {
+    const cells = line.split('|').filter(c => c.trim() && !c.match(/^[\s\-:]+$/));
+    if (cells.length === 0) return '';
+    return '<tr>' + cells.map(c => `<td>${c.trim()}</td>`).join('') + '</tr>';
+  });
+  if (text.includes('<tr>')) {
+    text = '<table class="table-mini">' + text + '</table>';
+  }
+
+  // Bullet lists
+  const lines = text.split('\n');
+  let inList = false;
+  let result = [];
+  for (const line of lines) {
+    if (line.match(/^[-•]\s/)) {
+      if (!inList) { result.push('<ul>'); inList = true; }
+      result.push('<li>' + line.replace(/^[-•]\s/, '') + '</li>');
+    } else {
+      if (inList) { result.push('</ul>'); inList = false; }
+      if (line.trim()) result.push('<p>' + line + '</p>');
+    }
+  }
+  if (inList) result.push('</ul>');
+
+  return result.join('');
+}
+
+async function sendMessage() {
+  if (isLoading) return;
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = '';
+  input.style.height = 'auto';
+
+  addMessage('user', `<p>${text}</p>`);
+  chatHistory.push({ role: 'user', content: text });
+
+  isLoading = true;
+  document.getElementById('sendBtn').disabled = true;
+
+  // Typing indicator
+  const typingDiv = addMessage('ai', '<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>');
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: STELLAR_SYSTEM,
+        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+        messages: chatHistory
+      })
+    });
+
+    const data = await response.json();
+
+    // Extract all text content
+    let fullText = '';
+    if (data.content) {
+      for (const block of data.content) {
+        if (block.type === 'text') fullText += block.text + '\n';
+      }
+    }
+
+    typingDiv.remove();
+
+    if (fullText.trim()) {
+      chatHistory.push({ role: 'assistant', content: fullText.trim() });
+      addMessage('ai', formatResponse(fullText.trim()));
+    } else if (data.error) {
+      addMessage('ai', `<div class="error-msg">API error: ${data.error.message}</div>`);
+    } else {
+      addMessage('ai', '<p>No response received. Check API key configuration.</p>');
+    }
+
+  } catch (err) {
+    typingDiv.remove();
+    addMessage('ai', `<div class="error-msg">Connection error: ${err.message}</div>`);
+  }
+
+  isLoading = false;
+  document.getElementById('sendBtn').disabled = false;
+}
+
+function sendQuick(text) {
+  document.getElementById('chatInput').value = text;
+  sendMessage();
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+</script>
+</body>
+</html>
