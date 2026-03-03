@@ -632,10 +632,44 @@
     padding: 8px 12px;
     border-radius: 4px;
   }
+  .launch-btn {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 5px;
+    padding: 10px 12px; color: var(--text-mid); font-family: Space Mono, monospace;
+    font-size: 11px; cursor: pointer; transition: all 0.15s; text-align: left; line-height: 1.5;
+  }
+  .launch-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+  .launch-hero {
+    background: linear-gradient(135deg, var(--accent-dim) 0%, var(--surface) 100%);
+    border: 1px solid var(--accent); border-radius: 8px; padding: 22px; text-align: center;
+  }
+  .launch-hero-btn {
+    background: var(--accent); border: none; border-radius: 6px; padding: 13px 24px;
+    color: #fff; font-family: Syne, sans-serif; font-weight: 700; font-size: 13px;
+    letter-spacing: 0.08em; cursor: pointer; width: 100%; margin-top: 12px; transition: background 0.2s;
+  }
+  .launch-hero-btn:hover { background: #6b95ff; }
+  .launch-toast {
+    display: none; background: var(--green-dim); border: 1px solid rgba(46,204,113,0.35);
+    border-radius: 5px; padding: 9px 14px; font-size: 11px; color: var(--green); margin-top: 10px;
+  }
+  .cprompt {
+    flex: 1; background: var(--panel); border: 1px solid var(--border); border-radius: 6px;
+    padding: 10px 14px; color: var(--text); font-family: Space Mono, monospace;
+    font-size: 12px; resize: none; height: 54px; outline: none;
+  }
+  .cprompt:focus { border-color: var(--accent); }
+  .cgo {
+    background: var(--accent); border: none; border-radius: 6px; padding: 10px 16px;
+    color: #fff; font-family: Syne, sans-serif; font-weight: 700; font-size: 12px;
+    cursor: pointer; align-self: stretch;
+  }
+  .cgo:hover { background: #6b95ff; }
+
 </style>
 </head>
 <body>
 <div class="app">
+  <!-- ── API KEY MODAL ── -->
 
   <header>
     <div class="logo">
@@ -668,46 +702,36 @@
     <div id="tab-command" class="tab-content active">
       <div class="grid-2" style="gap:16px; align-items:start;">
 
-        <!-- Chat panel -->
         <div class="card" style="grid-column: 1 / 2;">
           <div class="card-header">
             <span class="card-title">🌌 Stellar Intelligence</span>
-            <span class="rag rag-blue">CLAUDE SONNET</span>
+            <span class="rag rag-green">CLAUDE MAX</span>
           </div>
-          <div class="chat-wrap">
-            <div class="chat-messages" id="chatMessages">
-              <div class="msg ai">
-                <div class="msg-avatar">S</div>
-                <div class="msg-bubble">
-                  <p>Stellar Command is live. I have full context on your £999k portfolio across SIPP + ISA — holdings, layer targets, trigger thresholds, watchlist entries, and all 12 Golden Rules.</p>
-                  <p>Use the quick commands below, or ask anything. Examples:</p>
-                  <ul>
-                    <li><strong>weekly check</strong> — scan markets + flag triggers</li>
-                    <li><strong>monthly review</strong> — full layer weight + concentration check</li>
-                    <li><strong>quarterly review</strong> — cost curves + structural triggers</li>
-                    <li>Or ask anything — <em>"ASML dropped 12%, what do I do?"</em></li>
-                  </ul>
-                </div>
-              </div>
+          <div style="padding:20px; display:flex; flex-direction:column; gap:14px;">
+            <div class="launch-hero">
+              <div style="font-family:Syne,sans-serif; font-size:11px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-mid); margin-bottom:6px;">Open in Claude</div>
+              <div style="font-size:12px; color:var(--text-dim); line-height:1.65;">Copies your complete Stellar framework to clipboard and opens a new Claude conversation. Uses your MAX subscription — no API credits needed.</div>
+              <button class="launch-hero-btn" onclick="launchClaude()">⚡ Open Stellar Intelligence</button>
+              <div id="launchToast" class="launch-toast">✓ Stellar context copied to clipboard — paste into Claude to begin</div>
+              <div style="font-size:10px; color:var(--text-dim); margin-top:8px;">Opens claude.ai/new · Full framework + all holdings + triggers pre-loaded</div>
             </div>
-            <div class="chat-input-wrap">
-              <div class="quick-prompts">
-                <button class="qp" onclick="sendQuick('weekly check')">📊 Weekly check</button>
-                <button class="qp" onclick="sendQuick('monthly review')">📋 Monthly review</button>
-                <button class="qp" onclick="sendQuick('quarterly review')">🔬 Quarterly review</button>
-                <button class="qp" onclick="sendQuick('Run substrate test on all current holdings and flag any that are failing')">⚗️ Substrate audit</button>
-                <button class="qp" onclick="sendQuick('What are the current layer gaps and where should I be deploying capital?')">🎯 Layer gaps</button>
-                <button class="qp" onclick="sendQuick('Which positions are most at risk of reclassification already being complete?')">⚠️ Reclassification check</button>
-              </div>
-              <div class="chat-input-row">
-                <textarea class="chat-input" id="chatInput" placeholder="Ask anything about the Stellar portfolio…" rows="1"
-                  onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-                <button class="send-btn" id="sendBtn" onclick="sendMessage()">SEND</button>
-              </div>
+            <div style="font-family:Syne,sans-serif; font-size:10px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-dim);">Quick Commands</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+              <button class="launch-btn" onclick="launchClaude(this.dataset.q)" data-q="weekly check">📊 Weekly check</button>
+              <button class="launch-btn" onclick="launchClaude(this.dataset.q)" data-q="monthly review">📋 Monthly review</button>
+              <button class="launch-btn" onclick="launchClaude(this.dataset.q)" data-q="quarterly review">🔬 Quarterly review</button>
+              <button class="launch-btn" onclick="launchClaude(this.dataset.q)" data-q="Run the substrate test on all holdings. Flag any that fail or are borderline. Recommend action for each.">⚗️ Substrate audit</button>
+              <button class="launch-btn" onclick="launchClaude(this.dataset.q)" data-q="What are the current layer gaps and the priority order for deploying capital? Be specific on amounts and targets.">🎯 Layer gaps</button>
+              <button class="launch-btn" onclick="launchClaude(this.dataset.q)" data-q="Which holdings are at risk of reclassification already being complete and the multiple already re-rated? What should I do with each?">⚠️ Reclassification</button>
+            </div>
+            <div style="font-family:Syne,sans-serif; font-size:10px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-dim);">Custom</div>
+            <div style="display:flex; gap:8px;">
+              <textarea class="cprompt" id="cprompt" placeholder="e.g. ASML dropped 12%, what do I do?  ·  Score Prysmian against the framework  ·  Should I add to NVDA now?"
+                onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();launchClaude(this.value.trim())}"></textarea>
+              <button class="cgo" onclick="launchClaude(document.getElementById('cprompt').value.trim())">GO →</button>
             </div>
           </div>
         </div>
-
         <!-- Right column: risk controls + golden rules -->
         <div style="display:flex; flex-direction:column; gap:16px;">
 
@@ -1691,219 +1715,22 @@ syncFromSheets();
 setInterval(() => syncFromSheets(), 5 * 60 * 1000); // auto-refresh every 5 min
 
 
-const STELLAR_SYSTEM = `You are Stellar Intelligence — the AI co-pilot for a £999k institutional-grade investment portfolio built around the "Stellar Hypothesis" framework.
-
-PORTFOLIO OVERVIEW:
-- Combined AUM: ~£999k (SIPP ~£575k + ISA ~£424k)
-- Target: 15–20% CAGR
-- Doctrine: Own the irreplaceable physical, digital, and biological substrates upon which the next civilisational layer is being constructed
-
-SIX CIVILISATIONAL LAYERS + TARGET WEIGHTS:
-1. Compute (22%): NVDA, TSM, ASML, AMAT, AVGO, ANET
-2. Energy (15.3%): CCJ, BWXT, ETN, NEE, VRT, FCX, SPUT, FLNC
-3. Materials (12.6%): FCX, MP, SLVP, SGLD
-4. Biological (20.1%): TWST, ILMN, MRNA, SDGR, RXRX — currently ~15%, gap = ~£50k
-5. Sovereignty (10.4%): Rheinmetall, RKLB, BWXT, ASTS, SYM, LUNR
-6. Robotics (9%): Renishaw, Hexagon AB, Novanta, ROBG ETF — NEW LAYER, currently 0%
-7. Hedge (~16%): SGLD, SLVP, Winton, Ruffer Gold
-
-SIPP HOLDINGS: CCJ (£62,737, +46.6%), TWST (£51,882, +65.7%), Winton (£40,242), ANET (£39,134), NVDA (£29,060, UNDERSIZED - target £60k), BWXT (£32,559), ETN (£31,524), NEE (£30,967), AVGO (£31,303), TSM (£31,134), MRNA (£24,370), FLNC (£21,635), AMAT (£20,000 new), SDGR (£10,000 new), BNTX (£17,997 - EXIT), FSLR (£3,512 reduced), NVTS (£10,090 - EXIT), RXRX (£6,692), LUNR (£13,449 - EXIT), INRG (£10,386 - EXIT), Ruffer Gold (£7,060)
-
-ISA HOLDINGS: SGLD (£87,791 - cap at 10%), ASML (£58,130), VRT (£42,560), FCX (£40,000 new), Rheinmetall (£30,000 new), SPUT (£27,944), RKLB (£26,922), MSFT (£30,020), ILMN (£29,636), MP (£20,000 new), SLVP (£22,708), LEU (£17,741), OKLO (£15,930), ASTS (£9,756), RXRX (£5,444), SYM (£6,667), ISRG (£6,726)
-
-RISK CONTROLS:
-- Top-5 concentration: ≤35% AUM
-- Hedge floor (SGLD+SLVP+Winton+Ruffer): ≥12% AUM
-- Bio twin-risk (ILMN+TWST): ≤11% AUM (currently at watch level)
-- Single name cap: ≤10% AUM (SGLD approaching)
-- Dry powder: ≥5% AUM always
-
-WATCHLIST ENTRY TARGETS (do not buy above):
-- GEV: $600-650 (currently ~$840 — WAIT)
-- KTOS: $60-70 (currently ~$85 — WAIT)
-- ABB (ABBNY): $75-80 (currently ~$90 — WAIT)
-- CGNX: $42 (currently ~$47 — WAIT, 23% pullback needed)
-- RGEN: $110-120 (bioprocessing pure-play)
-- Renishaw (RSW): 3,800-4,300p (Tranche 1 deployable NOW)
-- Hexagon AB: SEK 85-99 (Tranche 1 deployable NOW, Stockholm listed)
-
-EXIT QUEUE: STEM, ADSK, DVN, ZBRA, DNA (Ginkgo), SNOW, CRWD, PANW, BNTX, LUNR, NVTS, INRG, SolarWindow
-
-DISRUPTION SCORES (0-100, higher = more resilient):
-- Copper (FCX): 82 — core, low disruption
-- ASML: 71 — China EUV risk monitored
-- Nuclear sleeve: 65 — niche-anchored (defence, isotopes)
-- ANET: 57 — moderate, hyperscaler in-house risk
-- NEE: 55 — moderate
-- FLNC: 34 — HIGH risk, hardware commoditising
-
-COST CURVE THRESHOLDS (quarterly):
-- Solar LCOE: AMBER <$20/MWh, RED <$15
-- Battery $/kWh: AMBER <$80, RED <$60
-- DNA synthesis $/bp: AMBER <$0.04, RED <$0.02 (WATCH — TWST impact)
-- AI inference $/M tokens: AMBER <$0.50, RED <$0.10
-- Humanoid production: AMBER >50k/yr, RED >200k/yr
-
-STRUCTURAL TRIGGERS:
-- S1: China EUV → ASML
-- S2: AI drug Phase 3 → SDGR/RXRX
-- S3: SSN(X) submarine → BWXT
-- S4: Kazatomprom access → CCJ/SPUT
-- S5: New Western uranium mine → CCJ
-- S6: Nuclear fleet closures → full nuclear sleeve
-
-WEEKLY CHECK: Search for S&P, Nasdaq, VIX levels; uranium spot (<$50/lb trigger); copper spot (<$3.50/lb trigger); any holdings with >10% weekly move. Compare against triggers. Output RAG status.
-
-MONTHLY REVIEW: Weekly check + bottom-3 rescore + layer weight check vs targets + concentration limits + hedge floor + bio twin-risk + watchlist prices.
-
-QUARTERLY REVIEW: Monthly + all 5 cost-curve metrics + all 6 structural triggers + thesis validation for all positions.
-
-GOLDEN RULES:
-1. Thesis is the substrate, not the story
-2. Winners deserve more capital (NVDA at 2.9% was the failure case)
-3. Losers need a reason to stay
-4. Concentration is fine; concentration without understanding is not
-5. Bubbles kill returns
-6. Dry powder is a position (5% always)
-7. IPOs: watch 6-12mo first
-8. Review worst performers monthly
-9. Themes are consensus; substrate test is not
-10. Size matches conviction
-11. Test the substrate, not the story
-12. Reclassification is where the returns are
-
-SUBSTRATE TEST: "Is this the thing without which the next layer cannot be built?" Applications, services, and beneficiaries fail the test.
-
-SCORING: 80-100 = Core conviction (4-7% AUM), 60-79 = Hold and monitor (2-4%), 40-59 = Reduce (≤2%), <40 = Exit
-
-OPERATOR STYLE: Be direct, decisive, structured. Use tables/bullet points. Call out naïve assumptions. Give recommendations, not explorations. British spelling. No corporate filler.`;
-
-let chatHistory = [];
-let isLoading = false;
-
-function addMessage(role, html) {
-  const messages = document.getElementById('chatMessages');
-  const div = document.createElement('div');
-  div.className = `msg ${role}`;
-  const avatar = role === 'ai' ? 'S' : 'B';
-  div.innerHTML = `
-    <div class="msg-avatar">${avatar}</div>
-    <div class="msg-bubble">${html}</div>
-  `;
-  messages.appendChild(div);
-  messages.scrollTop = messages.scrollHeight;
-  return div;
-}
-
-function formatResponse(text) {
-  // Convert markdown-ish to HTML
-  text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-  text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
-
-  // Tables
-  text = text.replace(/\|(.+)\|/g, (line) => {
-    const cells = line.split('|').filter(c => c.trim() && !c.match(/^[\s\-:]+$/));
-    if (cells.length === 0) return '';
-    return '<tr>' + cells.map(c => `<td>${c.trim()}</td>`).join('') + '</tr>';
+const STELLAR_CTX="You are Stellar Intelligence, AI co-pilot for a GBP999k portfolio on the Stellar Hypothesis: own irreplaceable substrates enabling the next civilisational layer. Target 15-20% CAGR. SIPP 575k + ISA 424k.\n\nLAYERS+TARGETS: Compute 22pct (NVDA,TSM,ASML,AMAT,AVGO,ANET), Energy 15.3pct (CCJ,BWXT,ETN,NEE,VRT,SPUT,FLNC), Materials 12.6pct (FCX,MP,SLVP,SGLD), Biological 20.1pct CURRENTLY 15pct GAP (TWST,ILMN,MRNA,SDGR,RXRX), Sovereignty 10.4pct (RHM,RKLB,BWXT,ASTS,SYM), Robotics 9pct ZERO POSITION (Renishaw,Hexagon,Novanta,ROBG), Hedge 16pct (SGLD,SLVP,Winton,Ruffer).\n\nRISK CONTROLS: Top-5 max 35pct AUM. Hedge floor 12pct. Bio twin-risk ILMN+TWST 11pct WATCH. SGLD cap 10pct WATCH. Dry powder 5pct min.\n\nSIPP: CCJ 62737 +46.6pct HOLD, TWST 51882 +65.7pct HOLD, Winton 40242 HOLD, ANET 39134 REVIEW, BWXT 32559 HOLD, AVGO 31303 HOLD, ETN 31524 HOLD, NEE 30967 HOLD, TSM 31134 HOLD, NVDA 29060 SIZE-UP to 60k, MRNA 24370 HOLD, FLNC 21635 REVIEW, AMAT 20000 HOLD, SDGR 10000 HOLD, BNTX 17997 EXIT, RXRX 6692 TRIM, LUNR 13449 EXIT, NVTS 10090 EXIT, INRG 10386 EXIT, Ruffer 7060 HOLD.\n\nISA: SGLD 87791 CAP, ASML 58130 HOLD, VRT 42560 HOLD, FCX 40000 HOLD, RHM 30000 HOLD, MSFT 30020 HOLD, SPUT 27944 HOLD, RKLB 26922 HOLD, ILMN 29636 HOLD, MP 20000 HOLD, SLVP 22708 HOLD, LEU 17741 MONITOR, OKLO 15930 MONITOR, ASTS 9756 HOLD, RXRX 5444 TRIM, SYM 6667 WATCH, ISRG 6726 HOLD.\n\nWATCHLIST: Renishaw 3800-4300p BUY T1 NOW, Hexagon SEK85-99 BUY T1 NOW, Novanta 125-142 BUY T1 NOW, ROBG BUY NOW, GEV 600-650 WAIT, KTOS 60-70 WAIT, ABB 75-80 WAIT, CGNX 42 WAIT, RGEN 110-120 WAIT.\n\nDISRUPTION SCORES (100=existential): FCX copper 82, ASML EUV 71, Nuclear 65, ANET AI-infra 57, NEE utility 55, FLNC BESS 34.\n\nCOST CURVE THRESHOLDS AMBER/RED: Solar LCOE 20/15 per MWh. Battery 80/60 per kWh. DNA synth 0.04/0.02 per bp. Inference 0.50/0.10 per M tokens. Humanoid 50k/200k units per yr.\n\nSTRUCTURAL TRIGGERS: S1 China EUV flag ASML. S2 AI drug Phase3 flag SDGR+RXRX. S3 SSN(X) flag BWXT. S4 Kazatomprom flag CCJ+SPUT. S5 New uranium mine flag CCJ. S6 Fleet closures flag nuclear sleeve.\n\nWEEKLY CHECK: Search S&P Nasdaq VIX current levels, uranium spot (AMBER below 50), copper spot (AMBER below 3.50), any holding over 10pct weekly move. Compare against thresholds. RAG status output.\nMONTHLY: weekly plus bottom-3 rescore plus layer weights vs targets plus concentration plus hedge floor plus bio twin-risk.\nQUARTERLY: monthly plus all 5 cost curves plus all 6 structural triggers plus thesis validation per holding.\n\nSCORING: 80-100 Core conviction 4-7pct AUM. 60-79 Hold 2-4pct. 40-59 Reduce max 2pct. Under 40 Exit.\n\n12 GOLDEN RULES: 1.Thesis is substrate not story. 2.Winners deserve more capital. 3.Losers need reason to stay. 4.Concentration fine without understanding not. 5.Bubbles kill returns. 6.Dry powder is a position. 7.IPOs watch 6-12 months. 8.Review worst monthly. 9.Themes consensus substrate test not. 10.Size matches conviction. 11.Test substrate not story. 12.Reclassification is where returns are.\n\nSUBSTRATE TEST: Is this the thing without which the next layer cannot be built? Applications, services, beneficiaries all fail. Be direct, decisive, structured. British spelling. No filler. Recommend not explore.";
+function launchClaude(cmd){
+  var q=cmd?cmd.trim():"";
+  var NL=String.fromCharCode(10);
+  var sep=NL+NL+"---"+NL+NL;
+  var txt=STELLAR_CTX+sep+(q||"Stellar Command ready. What would you like to do?");
+  var toast=document.getElementById("launchToast");
+  function show(){if(toast){toast.style.display="block";setTimeout(function(){toast.style.display="none";},3500);}}
+  navigator.clipboard.writeText(txt).then(show).catch(function(){
+    var t=document.createElement("textarea");
+    t.value=txt;t.style.cssText="position:fixed;opacity:0";
+    document.body.appendChild(t);t.select();
+    document.execCommand("copy");
+    document.body.removeChild(t);show();
   });
-  if (text.includes('<tr>')) {
-    text = '<table class="table-mini">' + text + '</table>';
-  }
-
-  // Bullet lists
-  const lines = text.split('\n');
-  let inList = false;
-  let result = [];
-  for (const line of lines) {
-    if (line.match(/^[-•]\s/)) {
-      if (!inList) { result.push('<ul>'); inList = true; }
-      result.push('<li>' + line.replace(/^[-•]\s/, '') + '</li>');
-    } else {
-      if (inList) { result.push('</ul>'); inList = false; }
-      if (line.trim()) result.push('<p>' + line + '</p>');
-    }
-  }
-  if (inList) result.push('</ul>');
-
-  return result.join('');
-}
-
-async function sendMessage() {
-  if (isLoading) return;
-  const input = document.getElementById('chatInput');
-  const text = input.value.trim();
-  if (!text) return;
-
-  input.value = '';
-  input.style.height = 'auto';
-
-  addMessage('user', `<p>${text}</p>`);
-  chatHistory.push({ role: 'user', content: text });
-
-  isLoading = true;
-  document.getElementById('sendBtn').disabled = true;
-
-  // Typing indicator
-  const typingDiv = addMessage('ai', '<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>');
-
-  try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: STELLAR_SYSTEM,
-        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
-        messages: chatHistory
-      })
-    });
-
-    const data = await response.json();
-
-    // Extract all text content
-    let fullText = '';
-    if (data.content) {
-      for (const block of data.content) {
-        if (block.type === 'text') fullText += block.text + '\n';
-      }
-    }
-
-    typingDiv.remove();
-
-    if (fullText.trim()) {
-      chatHistory.push({ role: 'assistant', content: fullText.trim() });
-      addMessage('ai', formatResponse(fullText.trim()));
-    } else if (data.error) {
-      addMessage('ai', `<div class="error-msg">API error: ${data.error.message}</div>`);
-    } else {
-      addMessage('ai', '<p>No response received. Check API key configuration.</p>');
-    }
-
-  } catch (err) {
-    typingDiv.remove();
-    addMessage('ai', `<div class="error-msg">Connection error: ${err.message}</div>`);
-  }
-
-  isLoading = false;
-  document.getElementById('sendBtn').disabled = false;
-}
-
-function sendQuick(text) {
-  document.getElementById('chatInput').value = text;
-  sendMessage();
-}
-
-function handleKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
-  }
-}
-
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+  window.open("https://claude.ai/new","_blank");
 }
 </script>
 </body>
