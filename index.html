@@ -665,6 +665,149 @@
   }
   .cgo:hover { background: #6b95ff; }
 
+
+  /* ── RETURNS TAB ── */
+  .returns-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-bottom:16px; }
+  .returns-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+  .metric-card {
+    background:var(--panel); border:1px solid var(--border); border-radius:8px;
+    padding:20px; display:flex; flex-direction:column; gap:4px;
+  }
+  .metric-label { font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-dim); }
+  .metric-value { font-family:Syne,sans-serif; font-size:28px; font-weight:800; color:#fff; line-height:1.1; }
+  .metric-value.green { color:var(--green); }
+  .metric-value.red   { color:var(--red); }
+  .metric-value.amber { color:var(--amber); }
+  .metric-sub  { font-size:11px; color:var(--text-dim); margin-top:2px; }
+  .metric-delta { font-size:13px; font-weight:700; }
+  .metric-delta.up   { color:var(--green); }
+  .metric-delta.down { color:var(--red); }
+  .returns-table { width:100%; border-collapse:collapse; font-size:12px; }
+  .returns-table th { font-size:10px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--text-dim); padding:8px 10px; border-bottom:1px solid var(--border); text-align:left; }
+  .returns-table th.num { text-align:right; }
+  .returns-table td { padding:8px 10px; border-bottom:1px solid rgba(255,255,255,0.04); vertical-align:middle; }
+  .returns-table td.num { text-align:right; font-family:Space Mono,monospace; font-size:11px; }
+  .returns-table tr:last-child td { border-bottom:none; }
+  .returns-table tr.total-row td { border-top:1px solid var(--border); font-weight:700; color:#fff; padding-top:12px; }
+  .daily-mover { display:flex; align-items:center; gap:8px; padding:7px 0; border-bottom:1px solid rgba(255,255,255,0.04); }
+  .daily-mover:last-child { border-bottom:none; }
+  .daily-ticker { font-family:Space Mono,monospace; font-size:11px; font-weight:700; color:var(--accent); min-width:52px; }
+  .daily-name   { font-size:11px; color:var(--text-mid); flex:1; }
+  .daily-price  { font-size:11px; font-family:Space Mono,monospace; color:var(--text-mid); min-width:70px; text-align:right; }
+  .daily-move   { font-size:12px; font-weight:700; min-width:64px; text-align:right; font-family:Space Mono,monospace; }
+  .daily-mv     { font-size:11px; color:var(--text-dim); min-width:72px; text-align:right; font-family:Space Mono,monospace; }
+  .irr-note     { font-size:10px; color:var(--text-dim); margin-top:6px; line-height:1.6; }
+  .account-summary-row { display:flex; gap:16px; margin-bottom:16px; }
+  .account-summary-card {
+    flex:1; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:18px;
+  }
+  .account-summary-title { font-family:Syne,sans-serif; font-size:11px; font-weight:700;
+    letter-spacing:0.12em; text-transform:uppercase; color:var(--text-dim); margin-bottom:12px; }
+  .account-stat { display:flex; justify-content:space-between; align-items:baseline;
+    padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.04); }
+  .account-stat:last-child { border-bottom:none; }
+  .account-stat-label { font-size:11px; color:var(--text-mid); }
+  .account-stat-value { font-size:12px; font-family:Space Mono,monospace; font-weight:700; }
+  .needs-prices { font-size:11px; color:var(--amber); font-style:italic; }
+
+
+  /* ── SCORES TAB ── */
+  .scores-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:14px; }
+  .score-card {
+    background:var(--panel); border:1px solid var(--border); border-radius:8px;
+    padding:16px; position:relative; transition:border-color 0.2s;
+  }
+  .score-card.alert-total  { border-color:var(--red);   }
+  .score-card.alert-dim    { border-color:var(--amber); }
+  .score-card-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:12px; gap:8px; }
+  .score-ticker { font-family:Syne,sans-serif; font-size:16px; font-weight:800; color:#fff; }
+  .score-name   { font-size:11px; color:var(--text-dim); margin-top:1px; }
+  .score-badge  {
+    font-family:Syne,sans-serif; font-size:22px; font-weight:800; line-height:1;
+    min-width:48px; text-align:right; flex-shrink:0;
+  }
+  .score-badge.s-core    { color:var(--green); }
+  .score-badge.s-hold    { color:var(--accent); }
+  .score-badge.s-reduce  { color:var(--amber); }
+  .score-badge.s-exit    { color:var(--red); }
+  .score-delta {
+    font-size:11px; font-weight:700; font-family:Space Mono,monospace;
+    padding:2px 6px; border-radius:3px; margin-left:4px; white-space:nowrap;
+  }
+  .score-delta.up   { background:rgba(46,204,113,0.15); color:var(--green); }
+  .score-delta.down { background:rgba(231,76,60,0.15);  color:var(--red); }
+  .score-delta.flat { background:rgba(255,255,255,0.06); color:var(--text-dim); }
+  /* Five dimension mini-bars */
+  .dim-bars { display:flex; flex-direction:column; gap:4px; margin-bottom:12px; }
+  .dim-row  { display:flex; align-items:center; gap:6px; }
+  .dim-label{ font-size:9px; letter-spacing:0.06em; text-transform:uppercase;
+              color:var(--text-dim); min-width:64px; }
+  .dim-track{ flex:1; height:4px; background:rgba(255,255,255,0.07); border-radius:2px; overflow:hidden; }
+  .dim-fill { height:100%; border-radius:2px; transition:width 0.4s; }
+  .dim-val  { font-size:9px; font-family:Space Mono,monospace; color:var(--text-dim); min-width:24px; text-align:right; }
+  .dim-delta{ font-size:9px; font-family:Space Mono,monospace; min-width:28px; text-align:right; }
+  /* Valuation zone bar */
+  .zone-wrap { margin-bottom:10px; }
+  .zone-label{ font-size:9px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;
+               color:var(--text-dim); margin-bottom:5px; }
+  .zone-bar  { position:relative; height:8px; background:rgba(255,255,255,0.06);
+               border-radius:4px; overflow:visible; margin:0 4px; }
+  .zone-buy  { position:absolute; height:100%; background:rgba(46,204,113,0.35);
+               border-radius:4px 0 0 4px; }
+  .zone-thesis{ position:absolute; top:-2px; width:3px; height:12px;
+                background:var(--accent); border-radius:2px; }
+  .zone-price { position:absolute; top:-4px; width:3px; height:16px;
+                border-radius:2px; transform:translateX(-50%); }
+  .zone-price.in-buy   { background:var(--green); box-shadow:0 0 6px var(--green); }
+  .zone-price.in-range { background:var(--amber);  box-shadow:0 0 6px var(--amber); }
+  .zone-price.above    { background:var(--red);    box-shadow:0 0 6px var(--red); }
+  .zone-legend { display:flex; gap:10px; margin-top:5px; font-size:9px; color:var(--text-dim); }
+  .zone-legend span { display:flex; align-items:center; gap:3px; }
+  /* Change note */
+  .change-note {
+    font-size:10px; color:var(--text-mid); background:rgba(255,255,255,0.04);
+    border-left:2px solid var(--amber); padding:6px 8px; border-radius:0 4px 4px 0;
+    margin-top:8px; line-height:1.5;
+  }
+  /* Score history sparkline */
+  .score-history { margin-top:8px; }
+  .hist-label { font-size:9px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); margin-bottom:4px; }
+  .hist-dots  { display:flex; align-items:flex-end; gap:4px; height:28px; }
+  .hist-dot   { flex:1; border-radius:2px 2px 0 0; min-width:8px; position:relative; cursor:default; }
+  .hist-dot:hover::after {
+    content:attr(data-tip); position:absolute; bottom:100%; left:50%; transform:translateX(-50%);
+    background:var(--surface); border:1px solid var(--border); border-radius:4px;
+    padding:2px 6px; font-size:9px; white-space:nowrap; z-index:10; color:var(--text);
+  }
+  /* Alerts banner */
+  .scores-alerts { margin-bottom:14px; }
+  .alert-banner {
+    background:rgba(231,76,60,0.1); border:1px solid rgba(231,76,60,0.3);
+    border-radius:6px; padding:10px 14px; margin-bottom:8px;
+    font-size:11px; color:var(--text); line-height:1.6;
+  }
+  .alert-banner.amber {
+    background:rgba(243,156,18,0.1); border-color:rgba(243,156,18,0.3);
+  }
+  .scores-filter { display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+  .filter-btn {
+    background:var(--panel); border:1px solid var(--border); border-radius:4px;
+    padding:5px 12px; color:var(--text-dim); font-family:Space Mono,monospace;
+    font-size:10px; cursor:pointer; transition:all 0.15s; letter-spacing:0.05em;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    border-color:var(--accent); color:var(--accent); background:var(--accent-dim);
+  }
+  .price-zone-status {
+    font-size:10px; font-weight:700; padding:2px 7px; border-radius:3px;
+    font-family:Space Mono,monospace; letter-spacing:0.04em;
+  }
+  .pz-buy   { background:rgba(46,204,113,0.15); color:var(--green); border:1px solid rgba(46,204,113,0.3); }
+  .pz-range { background:rgba(243,156,18,0.15); color:var(--amber); border:1px solid rgba(243,156,18,0.3); }
+  .pz-above { background:rgba(231,76,60,0.15);  color:var(--red);   border:1px solid rgba(231,76,60,0.3); }
+  .pz-none  { background:rgba(255,255,255,0.06); color:var(--text-dim); border:1px solid var(--border); }
+
 </style>
 </head>
 <body>
@@ -693,6 +836,8 @@
       <button class="tab" onclick="switchTab('monitor')">📡 Monitor</button>
       <button class="tab" onclick="switchTab('watchlist')">🎯 Watchlist</button>
       <button class="tab" onclick="switchTab('layers')">🌌 Layers</button>
+      <button class="tab" onclick="switchTab('scores')">⭐ Scores</button>
+      <button class="tab" onclick="switchTab('returns')">📈 Returns</button>
       <button class="tab" onclick="switchTab('holdings')">📋 Holdings</button>
     </div>
 
@@ -1427,6 +1572,214 @@
       </div>
     </div>
 
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- TAB: RETURNS                              -->
+    <!-- ══════════════════════════════════════════ -->
+    <div id="tab-returns" class="tab-content">
+
+      <!-- Row 1: Top-level P&L metrics -->
+      <div class="returns-grid" id="returnsTopRow">
+        <div class="metric-card">
+          <div class="metric-label">Total Portfolio Value</div>
+          <div class="metric-value" id="retTotalValue">—</div>
+          <div class="metric-sub">Holdings + Cash (SIPP + ISA)</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Total P&amp;L (£)</div>
+          <div class="metric-value" id="retTotalPL">—</div>
+          <div class="metric-sub" id="retTotalPLSub">vs total contributions</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Total Return (%)</div>
+          <div class="metric-value" id="retTotalPct">—</div>
+          <div class="metric-sub">Simple return on invested capital</div>
+        </div>
+      </div>
+
+      <!-- Row 2: IRR + Daily -->
+      <div class="returns-grid" id="returnsRow2">
+        <div class="metric-card">
+          <div class="metric-label">IRR (annualised)</div>
+          <div class="metric-value" id="retIRR">—</div>
+          <div class="metric-sub" id="retIRRSub">Requires CASHFLOWS tab in sheet</div>
+          <div class="irr-note" id="retIRRNote"></div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Daily Move (Total)</div>
+          <div class="metric-value" id="retDailyTotal">—</div>
+          <div class="metric-sub">Requires prices in sheet</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Daily Move (£)</div>
+          <div class="metric-value" id="retDailyGBP">—</div>
+          <div class="metric-sub">vs previous close</div>
+        </div>
+      </div>
+
+      <!-- Row 3: Account breakdown + Daily movers -->
+      <div class="returns-grid-2">
+
+        <!-- Account summaries -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📊 By Account</span>
+            <span id="retPricesStatus" class="rag rag-amber" style="font-size:10px">AWAITING PRICES</span>
+          </div>
+          <div class="card-body">
+            <div class="account-summary-row" style="flex-direction:column; gap:12px;">
+
+              <div class="account-summary-card">
+                <div class="account-summary-title">SIPP</div>
+                <div class="account-stat">
+                  <span class="account-stat-label">Holdings MV</span>
+                  <span class="account-stat-value" id="sippHoldingsMV">—</span>
+                </div>
+                <div class="account-stat">
+                  <span class="account-stat-label">Cash balance</span>
+                  <span class="account-stat-value" id="sippCash">—</span>
+                </div>
+                <div class="account-stat">
+                  <span class="account-stat-label">Total value</span>
+                  <span class="account-stat-value" id="sippTotal" style="color:#fff">—</span>
+                </div>
+                <div class="account-stat">
+                  <span class="account-stat-label">P&amp;L (£)</span>
+                  <span class="account-stat-value" id="sippPL">—</span>
+                </div>
+                <div class="account-stat">
+                  <span class="account-stat-label">Daily move</span>
+                  <span class="account-stat-value" id="sippDaily">—</span>
+                </div>
+              </div>
+
+              <div class="account-summary-card">
+                <div class="account-summary-title">ISA</div>
+                <div class="account-stat">
+                  <span class="account-stat-label">Holdings MV</span>
+                  <span class="account-stat-value" id="isaHoldingsMV">—</span>
+                </div>
+                <div class="account-stat">
+                  <span class="account-stat-label">Cash balance</span>
+                  <span class="account-stat-value" id="isaCash">—</span>
+                </div>
+                <div class="account-stat">
+                  <span class="account-stat-label">Total value</span>
+                  <span class="account-stat-value" id="isaTotal" style="color:#fff">—</span>
+                </div>
+                <div class="account-stat">
+                  <span class="account-stat-label">P&amp;L (£)</span>
+                  <span class="account-stat-value" id="isaPL">—</span>
+                </div>
+                <div class="account-stat">
+                  <span class="account-stat-label">Daily move</span>
+                  <span class="account-stat-value" id="isaDaily">—</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Daily movers table -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">⚡ Today's Movers</span>
+            <span id="dailyAsOf" style="font-size:10px; color:var(--text-dim)">—</span>
+          </div>
+          <div class="card-body" style="padding:0 16px 12px;">
+            <div id="dailyMovers">
+              <div style="font-size:11px; color:var(--text-dim); padding:16px 0; text-align:center;">
+                Add <code style="color:var(--accent)">price_local</code> + <code style="color:var(--accent)">prev_close_local</code> columns to your sheet to see live movers
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Full holdings returns table -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📋 Holdings Returns Detail</span>
+          <span style="font-size:10px; color:var(--text-dim)">Live MV = shares × price × FX rate</span>
+        </div>
+        <div style="overflow-x:auto; padding: 0 4px 4px;">
+          <table class="returns-table">
+            <thead>
+              <tr>
+                <th>Ticker</th>
+                <th>Name</th>
+                <th>Acct</th>
+                <th class="num">Shares</th>
+                <th class="num">Price</th>
+                <th class="num">Ccy</th>
+                <th class="num">Live MV (£)</th>
+                <th class="num">Day (£)</th>
+                <th class="num">Day (%)</th>
+                <th class="num">Total P&amp;L</th>
+                <th class="num">Total %</th>
+              </tr>
+            </thead>
+            <tbody id="returnsTableBody">
+              <tr><td colspan="11" style="text-align:center; color:var(--text-dim); font-size:11px; padding:20px">
+                Sync your sheet with shares, price_local, currency, prev_close_local columns to see live data
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- TAB: SCORES                               -->
+    <!-- ══════════════════════════════════════════ -->
+    <div id="tab-scores" class="tab-content">
+
+      <!-- Alerts banner -->
+      <div class="scores-alerts" id="scoresAlerts"></div>
+
+      <!-- Summary strip -->
+      <div class="returns-grid" style="margin-bottom:14px;">
+        <div class="metric-card">
+          <div class="metric-label">Holdings Scored</div>
+          <div class="metric-value" id="scCountTotal">—</div>
+          <div class="metric-sub">from SCORES sheet tab</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Score Alerts</div>
+          <div class="metric-value" id="scCountAlerts">—</div>
+          <div class="metric-sub">&ge;5pt total or &ge;10pt dimension change</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">In Buy Zone</div>
+          <div class="metric-value" id="scCountBuy">—</div>
+          <div class="metric-sub">Price &le; buy_high threshold</div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="scores-filter">
+        <button class="filter-btn active" onclick="filterScores('all',this)">All</button>
+        <button class="filter-btn" onclick="filterScores('alerts',this)">🔴 Alerts</button>
+        <button class="filter-btn" onclick="filterScores('buy-zone',this)">🟢 Buy Zone</button>
+        <button class="filter-btn" onclick="filterScores('core',this)">Core (80+)</button>
+        <button class="filter-btn" onclick="filterScores('watch',this)">Watch (&lt;70)</button>
+        <button class="filter-btn" onclick="filterScores('above',this)">⚠️ Above Thesis</button>
+      </div>
+
+      <!-- Cards grid -->
+      <div class="scores-grid" id="scoresGrid">
+        <div style="grid-column:1/-1; text-align:center; color:var(--text-dim); font-size:12px; padding:40px 0;">
+          Add a <code style="color:var(--accent)">SCORES</code> tab to your sheet to see Stellar scores.<br>
+          Columns: <code style="color:var(--accent)">ticker | score | score_date | substrate | demand | moat | valuation | mgmt | buy_low | buy_high | full_thesis | currency | change_note</code>
+        </div>
+      </div>
+
+    </div>
+
   </div>
 </div>
 
@@ -1452,7 +1805,7 @@ function switchTab(name) {
 const BASE_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ3WrE585dxz6RNlOHFf4aKjnb3IQMcSyZSd1AVu1mAf4jNOIvvkFPpH2DDCX4_MUmaEbnHndaB14Vh/pub';
 
 // All 5 published tab gids
-const ALL_GIDS = [620294545, 2109415850, 408093485, 547494965, 496665408, 356224071, 1642346013, 542365971, 1674996535, 1353977523];
+const ALL_GIDS = [620294545, 2109415850, 408093485, 547494965, 496665408];
 
 // We auto-detect which gid is which by reading the header row.
 // So tab order doesn't matter — headers drive routing.
@@ -1594,7 +1947,7 @@ async function fetchAndClassify(gid) {
   if (!rows.length) return { gid, type: 'empty', rows: [] };
   // Detect type from first row keys
   const firstKeys = Object.keys(rows[0]);
-  const type = detectTabType(firstKeys);
+  const type = detectTabTypeExtended(firstKeys);
   return { gid, type, rows };
 }
 
@@ -1629,9 +1982,22 @@ async function syncFromSheets() {
     const layerTab = results.find(r => r.type === 'layers' && r.rows.length > 0);
     if (layerTab) layerRows = layerTab.rows;
 
-    if (sippRows.length)  portfolioData.sipp   = csvToHoldings(sippRows);
-    if (isaRows.length)   portfolioData.isa    = csvToHoldings(isaRows);
+    if (sippRows.length)  portfolioData.sipp   = csvToHoldingsExtended(sippRows);
+    if (isaRows.length)   portfolioData.isa    = csvToHoldingsExtended(isaRows);
     if (layerRows.length) portfolioData.layers = csvToLayers(layerRows);
+
+    // Parse Returns tabs
+    var fxTab  = results.find(function(r){ return r.type==='fx'        && r.rows.length>0; });
+    var cashTab= results.find(function(r){ return r.type==='cash'      && r.rows.length>0; });
+    var cfTab  = results.find(function(r){ return r.type==='cashflows' && r.rows.length>0; });
+    if (fxTab)   returnsData.fx         = parseFX(fxTab.rows);
+    if (cashTab) returnsData.cash       = parseCash(cashTab.rows);
+    if (cfTab)   returnsData.cashflows  = parseCashflows(cfTab.rows);
+
+    var scTab  = results.find(function(r){ return r.type==='scores'    && r.rows.length>0; });
+    var logTab = results.find(function(r){ return r.type==='score_log' && r.rows.length>0; });
+    if (scTab)  scoresData.scores = parseScores(scTab.rows);
+    if (logTab) scoresData.log    = parseScoreLog(logTab.rows);
 
     const loadedTabs = results.filter(r => r.type !== 'empty' && r.type !== 'unknown').length;
     sheetsConnected = true;
@@ -1655,6 +2021,8 @@ function renderAll() {
   renderHoldingsTable('sippTable', portfolioData.sipp);
   renderHoldingsTable('isaTable',  portfolioData.isa);
   updateAUM();
+  renderReturns();
+  renderScores();
 }
 
 function updateAUM() {
@@ -1714,6 +2082,771 @@ syncFromSheets();
 // Auto-refresh every 5 minutes if sheet connected
 setInterval(() => syncFromSheets(), 5 * 60 * 1000); // auto-refresh every 5 min
 
+
+
+// ── Extended tab-type detection for Returns ──────────────────────────────────
+function detectTabTypeExtended(headers) {
+  var base = detectTabType(headers);
+  if (base !== 'unknown') return base;
+  var h = headers.map(function(x){ return x.toLowerCase(); });
+  if (h.includes('key') && h.includes('value'))                               return 'fx';
+  if (h.includes('account') && h.includes('cash_gbp'))                        return 'cash';
+  if (h.includes('date') && h.includes('type') && h.includes('amount_gbp'))   return 'cashflows';
+  if (h.includes('ticker') && h.includes('score') && h.includes('substrate') && h.includes('buy_low')) return 'scores';
+  if (h.includes('ticker') && h.includes('score') && h.includes('substrate') && !h.includes('buy_low')) return 'score_log';
+  return 'unknown';
+}
+
+function parseFX(rows) {
+  var out = {};
+  rows.forEach(function(r) {
+    var k = (r.key||'').toUpperCase().trim();
+    var v = parseFloat(r.value||0);
+    if (k && v > 0) out[k] = v;
+  });
+  return out;
+}
+function parseCash(rows) {
+  var out = {};
+  rows.forEach(function(r) {
+    var acct = (r.account||'').toUpperCase().trim();
+    var val  = parseFloat(r.cash_gbp||r.cash||0);
+    if (acct) out[acct] = val;
+  });
+  return out;
+}
+function parseCashflows(rows) {
+  return rows.map(function(r) {
+    return { date: r.date||'', account: (r.account||'').toUpperCase(), type: (r.type||'').toUpperCase(), amount_gbp: parseFloat(r.amount_gbp||r.amount||0) };
+  }).filter(function(r){ return r.date && r.amount_gbp > 0; });
+}
+
+// ── Patch holdings parsing to include shares/price/prev columns ───────────────
+function csvToHoldingsExtended(rows) {
+  return rows.map(function(r) {
+    var base = {
+      ticker:      r.ticker || r.symbol || '',
+      name:        r.name || '',
+      layer:       r.layer || '',
+      mv:          r.mv_gbp || r.mv || '',
+      gl:          r.gl_pct || r.gl || '',
+      glPos:       (r.gl_pct||r.gl||'').startsWith('+') ? true : (r.gl_pct||r.gl||'').startsWith('-') ? false : null,
+      notes:       r.notes || '',
+      action:      (r.action||'HOLD').toUpperCase(),
+      actionClass: actionToClass((r.action||'HOLD').toUpperCase()),
+      exit:        (r.action||'').toUpperCase() === 'EXIT',
+      // Returns fields
+      shares:           r.shares || r.qty || '',
+      price_local:      r.price_local || r.price || '',
+      currency:         r.currency || r.ccy || 'USD',
+      prev_close_local: r.prev_close_local || r.prev_close || '',
+      cost_gbp:         r.cost_gbp || r.cost || '',
+    };
+    return base;
+  });
+}
+
+
+// ══════════════════════════════════════════════════════════════════
+// RETURNS ENGINE
+// ══════════════════════════════════════════════════════════════════
+
+// Parsed from sheet — populated by syncFromSheets extended logic
+let returnsData = {
+  fx: {},            // { GBPUSD: 1.265, GBPEUR: 1.182, GBPSEK: 13.45, GBPGBP: 1.0 }
+  cash: {},          // { SIPP: 15000, ISA: 8000 }
+  cashflows: [],     // [{ date, account, type, amount_gbp }]
+  prices: {},        // { CCJ: { price: 48.2, prev: 47.1, ccy: 'USD' }, ... }
+  costBasis: {},     // { SIPP: 500000, ISA: 400000 } — from CASHFLOWS contributions
+};
+
+// Formatting helpers
+function fmtGBP(n) {
+  if (n == null || isNaN(n)) return '—';
+  var abs = Math.abs(n);
+  var s = abs >= 1000000 ? '£' + (abs/1000000).toFixed(2) + 'm'
+        : abs >= 1000    ? '£' + Math.round(abs).toLocaleString('en-GB')
+        :                  '£' + abs.toFixed(0);
+  return n < 0 ? '-' + s : s;
+}
+function fmtPct(n, dp) {
+  if (n == null || isNaN(n)) return '—';
+  return (n >= 0 ? '+' : '') + n.toFixed(dp != null ? dp : 1) + '%';
+}
+function colorClass(n) {
+  return n > 0 ? 'green' : n < 0 ? 'red' : '';
+}
+function setMetric(id, val, cls) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = val;
+  el.className = 'metric-value' + (cls ? ' ' + cls : '');
+}
+function setEl(id, val, color) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = val;
+  if (color) el.style.color = color;
+}
+
+// IRR Newton-Raphson solver
+function calcIRR(cashflows) {
+  // cashflows: [{ t: years_from_start, amount: +ve in, -ve out }]
+  // Final entry is terminal value (positive)
+  if (!cashflows || cashflows.length < 2) return null;
+  var rate = 0.15;
+  for (var iter = 0; iter < 200; iter++) {
+    var npv = 0, dnpv = 0;
+    for (var i = 0; i < cashflows.length; i++) {
+      var cf = cashflows[i];
+      var disc = Math.pow(1 + rate, cf.t);
+      npv  += cf.amount / disc;
+      dnpv -= cf.t * cf.amount / (disc * (1 + rate));
+    }
+    if (Math.abs(dnpv) < 1e-10) break;
+    var newRate = rate - npv / dnpv;
+    if (Math.abs(newRate - rate) < 1e-8) { rate = newRate; break; }
+    rate = Math.max(-0.99, Math.min(newRate, 10));
+  }
+  return isNaN(rate) || !isFinite(rate) ? null : rate;
+}
+
+// Compute FX rate: local ccy → GBP
+function toGBP(amount, ccy) {
+  if (!ccy || ccy.toUpperCase() === 'GBP' || ccy.toUpperCase() === 'GBX') {
+    return ccy && ccy.toUpperCase() === 'GBX' ? amount / 100 : amount;
+  }
+  var key = 'GBP' + ccy.toUpperCase();
+  var rate = returnsData.fx[key];
+  if (!rate || rate <= 0) return null; // signal: FX missing
+  return amount / rate;
+}
+
+// Compute live MV for a holding object (needs shares, price_local, currency)
+function holdingLiveMV(h) {
+  var shares = parseFloat(h.shares || h.qty || 0);
+  var price  = parseFloat(h.price_local || h.price || 0);
+  var ccy    = (h.currency || h.ccy || 'USD').toUpperCase();
+  if (!shares || !price) return null;
+  return toGBP(shares * price, ccy);
+}
+
+// Compute cost basis for a holding (mv_cost or cost_gbp column)
+function holdingCostGBP(h) {
+  var c = parseFloat(h.cost_gbp || h.mv_cost || h.cost || 0);
+  return c || null;
+}
+
+// Compute prev MV
+function holdingPrevMV(h) {
+  var shares = parseFloat(h.shares || h.qty || 0);
+  var prev   = parseFloat(h.prev_close_local || h.prev_close || 0);
+  var ccy    = (h.currency || h.ccy || 'USD').toUpperCase();
+  if (!shares || !prev) return null;
+  return toGBP(shares * prev, ccy);
+}
+
+function renderReturns() {
+  var fx      = returnsData.fx;
+  var cash    = returnsData.cash;
+  var cflows  = returnsData.cashflows;
+  var allHoldings = [
+    ...portfolioData.sipp.map(function(h){ return Object.assign({}, h, {_acct:'SIPP'}); }),
+    ...portfolioData.isa.map( function(h){ return Object.assign({}, h, {_acct:'ISA'}); }),
+  ];
+
+  var hasPrices = allHoldings.some(function(h){ return parseFloat(h.price_local||0) > 0; });
+  var hasFX     = Object.keys(fx).length > 0;
+  var hasCash   = Object.keys(cash).length > 0;
+
+  // ── Account totals ──
+  var sippMV=0, isaMV=0, sippPrev=0, isaPrev=0;
+  var sippCost=0, isaCost=0;
+  var mvMissing = false;
+
+  allHoldings.forEach(function(h) {
+    var mv   = holdingLiveMV(h);
+    var prev = holdingPrevMV(h);
+    var cost = holdingCostGBP(h);
+
+    if (mv == null) {
+      // Fall back to static mv string
+      var raw = parseFloat((h.mv||'').replace(/[£,]/g,''));
+      if (!isNaN(raw)) mv = (h.mv||'').includes('k') ? raw*1000 : raw;
+      else mvMissing = true;
+    }
+    if (mv) {
+      if (h._acct==='SIPP') sippMV += mv; else isaMV += mv;
+    }
+    if (prev) {
+      if (h._acct==='SIPP') sippPrev += prev; else isaPrev += prev;
+    }
+    if (cost) {
+      if (h._acct==='SIPP') sippCost += cost; else isaCost += cost;
+    }
+  });
+
+  var sippCashVal = parseFloat(cash['SIPP'] || cash['sipp'] || 0);
+  var isaCashVal  = parseFloat(cash['ISA']  || cash['isa']  || 0);
+  var sippTotal   = sippMV + sippCashVal;
+  var isaTotal    = isaMV  + isaCashVal;
+  var grandTotal  = sippTotal + isaTotal;
+
+  // ── Cashflow-based cost basis ──
+  var totalContribs = 0, totalWithdrawals = 0;
+  var cfByAcct = {SIPP:0, ISA:0};
+  cflows.forEach(function(cf) {
+    var amt = parseFloat(cf.amount_gbp || cf.amount || 0);
+    var acct = (cf.account||'').toUpperCase();
+    if ((cf.type||'').toUpperCase() === 'CONTRIBUTION') {
+      totalContribs += amt;
+      if (cfByAcct[acct] != null) cfByAcct[acct] += amt;
+    } else if ((cf.type||'').toUpperCase() === 'WITHDRAWAL') {
+      totalWithdrawals += amt;
+      if (cfByAcct[acct] != null) cfByAcct[acct] -= amt;
+    }
+  });
+
+  var netInvested = totalContribs - totalWithdrawals;
+  var totalPL     = netInvested > 0 ? grandTotal - netInvested : null;
+  var totalPct    = (netInvested > 0 && totalPL != null) ? (totalPL / netInvested) * 100 : null;
+
+  // ── IRR ──
+  var irr = null;
+  if (cflows.length >= 1) {
+    // Build IRR cashflow series
+    var refDate = null;
+    var irrCFs = [];
+    cflows.forEach(function(cf) {
+      var d = new Date(cf.date);
+      if (!refDate || d < refDate) refDate = d;
+    });
+    if (refDate) {
+      cflows.forEach(function(cf) {
+        var d = new Date(cf.date);
+        var t = (d - refDate) / (365.25 * 24 * 3600 * 1000);
+        var amt = parseFloat(cf.amount_gbp || cf.amount || 0);
+        var isIn = (cf.type||'').toUpperCase() === 'CONTRIBUTION';
+        irrCFs.push({ t: t, amount: isIn ? -amt : amt });
+      });
+      // Terminal value: today
+      var now = new Date();
+      var tNow = (now - refDate) / (365.25 * 24 * 3600 * 1000);
+      irrCFs.push({ t: tNow, amount: grandTotal });
+      irr = calcIRR(irrCFs);
+    }
+  }
+
+  // ── Daily ──
+  var dailyGBP  = (sippMV + isaMV > 0 && sippPrev + isaPrev > 0)
+                  ? (sippMV + isaMV) - (sippPrev + isaPrev) : null;
+  var dailyPct  = (dailyGBP != null && sippPrev + isaPrev > 0)
+                  ? (dailyGBP / (sippPrev + isaPrev)) * 100 : null;
+  var sippDailyGBP = (sippMV > 0 && sippPrev > 0) ? sippMV - sippPrev : null;
+  var isaDailyGBP  = (isaMV  > 0 && isaPrev  > 0) ? isaMV  - isaPrev  : null;
+
+  // ── Render top metrics ──
+  setMetric('retTotalValue', grandTotal > 0 ? fmtGBP(grandTotal) : '—', '');
+  setMetric('retTotalPL',    totalPL   != null ? fmtGBP(totalPL)   : '—', totalPL ? colorClass(totalPL) : '');
+  setMetric('retTotalPct',   totalPct  != null ? fmtPct(totalPct,1): '—', totalPct ? colorClass(totalPct) : '');
+  setMetric('retIRR',        irr       != null ? fmtPct(irr*100,1) : '—', irr ? colorClass(irr) : '');
+  setMetric('retDailyTotal', dailyPct  != null ? fmtPct(dailyPct,2): '—', dailyPct ? colorClass(dailyPct) : '');
+  setMetric('retDailyGBP',   dailyGBP  != null ? fmtGBP(dailyGBP) : '—', dailyGBP ? colorClass(dailyGBP) : '');
+
+  if (netInvested > 0) {
+    setEl('retTotalPLSub', 'Net invested: ' + fmtGBP(netInvested));
+  }
+  if (irr != null) {
+    setEl('retIRRNote', 'Based on ' + cflows.length + ' cashflow(s) from ' + (cflows[0] ? cflows[0].date : '?'));
+  } else if (cflows.length === 0) {
+    setEl('retIRRNote', 'Add a CASHFLOWS tab: date | account | type | amount_gbp');
+  }
+
+  // ── Account cards ──
+  var sippPLval = cfByAcct.SIPP > 0 ? sippTotal - cfByAcct.SIPP : null;
+  var isaPLval  = cfByAcct.ISA  > 0 ? isaTotal  - cfByAcct.ISA  : null;
+
+  setEl('sippHoldingsMV', sippMV  > 0 ? fmtGBP(sippMV)  : '—', sippMV  > 0 ? '#fff' : null);
+  setEl('isaHoldingsMV',  isaMV   > 0 ? fmtGBP(isaMV)   : '—', isaMV   > 0 ? '#fff' : null);
+  setEl('sippCash', hasCash ? fmtGBP(sippCashVal) : '—', 'var(--text-mid)');
+  setEl('isaCash',  hasCash ? fmtGBP(isaCashVal)  : '—', 'var(--text-mid)');
+  setEl('sippTotal', sippTotal > 0 ? fmtGBP(sippTotal) : '—');
+  setEl('isaTotal',  isaTotal  > 0 ? fmtGBP(isaTotal)  : '—');
+  setEl('sippPL', sippPLval != null ? fmtGBP(sippPLval) : '—',
+        sippPLval ? (sippPLval>0?'var(--green)':'var(--red)') : null);
+  setEl('isaPL',  isaPLval  != null ? fmtGBP(isaPLval)  : '—',
+        isaPLval  ? (isaPLval>0?'var(--green)':'var(--red)') : null);
+  setEl('sippDaily', sippDailyGBP != null ? fmtGBP(sippDailyGBP) + ' (' + fmtPct((sippDailyGBP/sippPrev)*100,2) + ')' : '—',
+        sippDailyGBP ? (sippDailyGBP>0?'var(--green)':'var(--red)') : null);
+  setEl('isaDaily',  isaDailyGBP  != null ? fmtGBP(isaDailyGBP)  + ' (' + fmtPct((isaDailyGBP/isaPrev)*100,2)  + ')' : '—',
+        isaDailyGBP  ? (isaDailyGBP>0?'var(--green)':'var(--red)') : null);
+
+  // Status badge
+  var badge = document.getElementById('retPricesStatus');
+  if (badge) {
+    if (hasPrices && hasFX) {
+      badge.textContent='LIVE'; badge.className='rag rag-green';
+    } else if (hasPrices) {
+      badge.textContent='PRICES — NO FX'; badge.className='rag rag-amber';
+    } else {
+      badge.textContent='AWAITING PRICES'; badge.className='rag rag-amber';
+    }
+  }
+
+  // ── Daily movers ──
+  var movers = [];
+  allHoldings.forEach(function(h) {
+    var price = parseFloat(h.price_local || 0);
+    var prev  = parseFloat(h.prev_close_local || 0);
+    if (!price || !prev) return;
+    var ccy   = (h.currency || 'USD').toUpperCase();
+    var mv    = holdingLiveMV(h);
+    var dayPct = ((price - prev) / prev) * 100;
+    var dayGBP = mv != null ? mv - (holdingPrevMV(h)||mv) : null;
+    movers.push({ h: h, dayPct: dayPct, dayGBP: dayGBP, price: price, ccy: ccy, mv: mv });
+  });
+  movers.sort(function(a,b){ return Math.abs(b.dayPct)-Math.abs(a.dayPct); });
+
+  var moversEl = document.getElementById('dailyMovers');
+  if (moversEl) {
+    if (movers.length === 0) {
+      moversEl.innerHTML = '<div style="font-size:11px;color:var(--text-dim);padding:16px 0;text-align:center">Add <code style="color:var(--accent)">price_local</code> + <code style="color:var(--accent)">prev_close_local</code> to your sheet</div>';
+    } else {
+      moversEl.innerHTML = movers.slice(0,15).map(function(m) {
+        var up = m.dayPct >= 0;
+        var col = up ? 'var(--green)' : 'var(--red)';
+        var priceStr = m.ccy === 'GBX' ? m.price.toFixed(0) + 'p' :
+                       m.ccy === 'GBP' ? '£' + m.price.toFixed(2) :
+                       m.ccy === 'SEK' ? 'SEK' + m.price.toFixed(1) :
+                       m.ccy === 'EUR' ? '€' + m.price.toFixed(2) :
+                       '$' + m.price.toFixed(2);
+        var mvStr = m.mv != null ? fmtGBP(m.mv) : '—';
+        var dayStr= m.dayGBP != null ? (m.dayGBP>=0?'+':'')+fmtGBP(m.dayGBP) : '';
+        return '<div class="daily-mover">' +
+          '<span class="daily-ticker">' + m.h.ticker + '</span>' +
+          '<span class="daily-name">'   + (m.h.name||'')  + '</span>' +
+          '<span class="daily-price">'  + priceStr + '</span>' +
+          '<span class="daily-move" style="color:' + col + '">' + fmtPct(m.dayPct,2) + '</span>' +
+          '<span class="daily-mv" style="color:var(--text-dim)">' + mvStr + '</span>' +
+          '</div>';
+      }).join('');
+    }
+  }
+  if (movers.length > 0) {
+    setEl('dailyAsOf', 'as of sync · ' + new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}));
+  }
+
+  // ── Full holdings returns table ──
+  var tbody = document.getElementById('returnsTableBody');
+  if (!tbody) return;
+
+  var rows = allHoldings.map(function(h) {
+    var shares = parseFloat(h.shares || 0);
+    var price  = parseFloat(h.price_local || 0);
+    var prev   = parseFloat(h.prev_close_local || 0);
+    var ccy    = (h.currency || 'USD').toUpperCase();
+    var cost   = holdingCostGBP(h);
+    var liveMV = holdingLiveMV(h);
+    var prevMV = holdingPrevMV(h);
+    var dayGBP = (liveMV && prevMV) ? liveMV - prevMV : null;
+    var dayPct = (dayGBP && prevMV) ? (dayGBP/prevMV)*100 : null;
+    var plGBP  = (liveMV && cost)   ? liveMV - cost   : null;
+    var plPct  = (plGBP  && cost)   ? (plGBP/cost)*100 : null;
+
+    var priceDisp = price > 0 ? (ccy==='GBX'?price.toFixed(0)+'p':
+                                 ccy==='EUR'?'€'+price.toFixed(2):
+                                 ccy==='SEK'?'SEK'+price.toFixed(1):
+                                 ccy==='GBP'?'£'+price.toFixed(2):
+                                 '$'+price.toFixed(2)) : '—';
+
+    return '<tr>' +
+      '<td><span class="ticker">' + h.ticker + '</span></td>' +
+      '<td style="font-size:11px;color:var(--text-mid)">' + (h.name||'') + '</td>' +
+      '<td><span class="rag ' + (h._acct==='SIPP'?'rag-blue':'rag-green') + '" style="font-size:9px">' + h._acct + '</span></td>' +
+      '<td class="num">' + (shares>0?shares.toLocaleString('en-GB'):'—') + '</td>' +
+      '<td class="num">' + priceDisp + '</td>' +
+      '<td class="num" style="color:var(--text-dim)">' + ccy + '</td>' +
+      '<td class="num" style="color:#fff">' + (liveMV?fmtGBP(liveMV):(h.mv||'—')) + '</td>' +
+      '<td class="num" style="color:' + (dayGBP!=null?(dayGBP>=0?'var(--green)':'var(--red)'):'var(--text-dim)') + '">' + (dayGBP!=null?(dayGBP>=0?"+":"")+fmtGBP(dayGBP):'—') + '</td>' +
+      '<td class="num" style="color:' + (dayPct!=null?(dayPct>=0?'var(--green)':'var(--red)'):'var(--text-dim)') + '">' + (dayPct!=null?fmtPct(dayPct,2):'—') + '</td>' +
+      '<td class="num" style="color:' + (plGBP!=null?(plGBP>=0?'var(--green)':'var(--red)'):'var(--text-dim)') + '">' + (plGBP!=null?(plGBP>=0?"+":"")+fmtGBP(plGBP):'—') + '</td>' +
+      '<td class="num" style="color:' + (plPct!=null?(plPct>=0?'var(--green)':'var(--red)'):'var(--text-dim)') + '">' + (plPct!=null?fmtPct(plPct,1):'—') + '</td>' +
+      '</tr>';
+  });
+
+  // Totals row
+  var totLiveMV = allHoldings.reduce(function(s,h){ var v=holdingLiveMV(h); return s+(v||0); }, 0);
+  var totPrev   = allHoldings.reduce(function(s,h){ var v=holdingPrevMV(h); return s+(v||0); }, 0);
+  var totDay    = (totLiveMV>0&&totPrev>0) ? totLiveMV-totPrev : null;
+  var totDayPct = (totDay&&totPrev>0) ? (totDay/totPrev)*100 : null;
+  var totCost   = allHoldings.reduce(function(s,h){ var v=holdingCostGBP(h); return s+(v||0); }, 0);
+  var totPL     = (totLiveMV>0&&totCost>0) ? totLiveMV-totCost : null;
+  var totPLPct  = (totPL&&totCost>0) ? (totPL/totCost)*100 : null;
+
+  rows.push('<tr class="total-row">' +
+    '<td colspan="6">TOTAL HOLDINGS</td>' +
+    '<td class="num">' + (totLiveMV>0?fmtGBP(totLiveMV):'—') + '</td>' +
+    '<td class="num" style="color:' + (totDay!=null?(totDay>=0?'var(--green)':'var(--red)'):'var(--text-dim)') + '">' + (totDay!=null?(totDay>=0?"+":"")+fmtGBP(totDay):'—') + '</td>' +
+    '<td class="num" style="color:' + (totDayPct!=null?(totDayPct>=0?'var(--green)':'var(--red)'):'var(--text-dim)') + '">' + (totDayPct!=null?fmtPct(totDayPct,2):'—') + '</td>' +
+    '<td class="num" style="color:' + (totPL!=null?(totPL>=0?'var(--green)':'var(--red)'):'var(--text-dim)') + '">' + (totPL!=null?(totPL>=0?"+":"")+fmtGBP(totPL):'—') + '</td>' +
+    '<td class="num" style="color:' + (totPLPct!=null?(totPLPct>=0?'var(--green)':'var(--red)'):'var(--text-dim)') + '">' + (totPLPct!=null?fmtPct(totPLPct,1):'—') + '</td>' +
+    '</tr>');
+
+  tbody.innerHTML = rows.join('');
+}
+
+
+function parseScores(rows) {
+  return rows.map(function(r) {
+    return {
+      ticker:       (r.ticker||r.symbol||'').toUpperCase(),
+      name:         r.name || '',
+      score:        parseInt(r.score||0),
+      score_date:   r.score_date || r.date || '',
+      substrate:    parseInt(r.substrate||0),
+      demand:       parseInt(r.demand||0),
+      moat:         parseInt(r.moat||0),
+      valuation:    parseInt(r.valuation||0),
+      mgmt:         parseInt(r.mgmt||0),
+      buy_low:      parseFloat(r.buy_low||0),
+      buy_high:     parseFloat(r.buy_high||0),
+      full_thesis:  parseFloat(r.full_thesis||0),
+      currency:     (r.currency||r.ccy||'USD').toUpperCase(),
+      change_note:  r.change_note || r.note || '',
+    };
+  }).filter(function(r){ return r.ticker && r.score > 0; });
+}
+
+function parseScoreLog(rows) {
+  return rows.map(function(r) {
+    return {
+      date:      r.date || '',
+      ticker:    (r.ticker||'').toUpperCase(),
+      score:     parseInt(r.score||0),
+      substrate: parseInt(r.substrate||0),
+      demand:    parseInt(r.demand||0),
+      moat:      parseInt(r.moat||0),
+      valuation: parseInt(r.valuation||0),
+      mgmt:      parseInt(r.mgmt||0),
+      change_note: r.change_note || r.note || '',
+    };
+  }).filter(function(r){ return r.ticker && r.date; });
+}
+
+// ══════════════════════════════════════════════════════════════════
+// SCORES ENGINE
+// ══════════════════════════════════════════════════════════════════
+
+// Populated by syncFromSheets extended routing
+var scoresData = {
+  scores:  [],   // current SCORES tab rows
+  log:     [],   // SCORE_LOG tab rows (full history)
+  prices:  {},   // ticker -> { price_local, currency } (from holdings)
+};
+
+// Dimension config: key, label, weight, colour
+var DIMS = [
+  { key:'substrate', label:'Substrate', weight:30, color:'#4f7fff' },
+  { key:'demand',    label:'Demand',    weight:25, color:'#2ecc71' },
+  { key:'moat',      label:'Moat',      weight:20, color:'#9b59b6' },
+  { key:'valuation', label:'Valuation', weight:15, color:'#f39c12' },
+  { key:'mgmt',      label:'Mgmt',      weight:10, color:'#1abc9c' },
+];
+
+function scoreTier(s) {
+  if (s >= 80) return { cls:'s-core',   label:'CORE'   };
+  if (s >= 60) return { cls:'s-hold',   label:'HOLD'   };
+  if (s >= 40) return { cls:'s-reduce', label:'REDUCE' };
+  return            { cls:'s-exit',   label:'EXIT'   };
+}
+
+// Get log entries for a ticker, sorted oldest->newest
+function tickerLog(ticker) {
+  return scoresData.log
+    .filter(function(r){ return (r.ticker||'').toUpperCase() === ticker.toUpperCase(); })
+    .sort(function(a,b){ return new Date(a.date) - new Date(b.date); });
+}
+
+// Detect alerts for a score row vs its previous log entry
+function detectAlerts(row) {
+  var log = tickerLog(row.ticker);
+  if (log.length === 0) return { totalDelta:0, dimAlerts:[], prevScore:null };
+  var prev = log[log.length-1];
+  var cur  = parseInt(row.score||0);
+  var prv  = parseInt(prev.score||0);
+  var totalDelta = cur - prv;
+  var dimAlerts = [];
+  DIMS.forEach(function(d) {
+    var dc = parseInt(row[d.key]||0);
+    var dp = parseInt(prev[d.key]||0);
+    if (dc && dp && Math.abs(dc-dp) >= 10) {
+      dimAlerts.push({ dim:d.label, delta:dc-dp });
+    }
+  });
+  return { totalDelta:totalDelta, dimAlerts:dimAlerts, prevScore:prv };
+}
+
+// Get live price for a ticker from holdings
+function getLivePrice(ticker) {
+  var all = [].concat(portfolioData.sipp, portfolioData.isa);
+  var h = all.find(function(h){ return (h.ticker||'').toUpperCase() === ticker.toUpperCase(); });
+  if (!h) return null;
+  var p = parseFloat(h.price_local || 0);
+  var c = (h.currency || 'USD').toUpperCase();
+  return p > 0 ? { price:p, ccy:c } : null;
+}
+
+// Convert local price to GBP equiv for zone comparison (zones stored in local ccy)
+function priceInLocalCcy(ticker) {
+  var lp = getLivePrice(ticker);
+  return lp ? lp : null;
+}
+
+// Zone status: where does price sit vs buy_low/buy_high/full_thesis
+function priceZoneStatus(row) {
+  var lp = priceInLocalCcy(row.ticker);
+  if (!lp || !lp.price) return null;
+  var p  = lp.price;
+  var bl = parseFloat(row.buy_low   || 0);
+  var bh = parseFloat(row.buy_high  || 0);
+  var ft = parseFloat(row.full_thesis || 0);
+  if (!bh || !ft) return null;
+  if (p <= bh)      return 'buy';
+  if (p <= ft)      return 'range';
+  return 'above';
+}
+
+// Build zone bar visual (0-100% width normalised to full_thesis * 1.2)
+function buildZoneBar(row) {
+  var lp = priceInLocalCcy(row.ticker);
+  var p  = lp ? lp.price : 0;
+  var bl = parseFloat(row.buy_low    || 0);
+  var bh = parseFloat(row.buy_high   || 0);
+  var ft = parseFloat(row.full_thesis|| 0);
+  if (!bh || !ft) return '<div style="font-size:10px;color:var(--text-dim)">Set buy_low, buy_high, full_thesis in SCORES tab</div>';
+
+  var scale = ft * 1.25;
+  var blPct = Math.min((bl/scale)*100, 100);
+  var bhPct = Math.min((bh/scale)*100, 100);
+  var ftPct = Math.min((ft/scale)*100, 100);
+  var pPct  = p > 0 ? Math.min((p/scale)*100, 105) : null;
+
+  var zone = pPct != null ? priceZoneStatus(row) : null;
+  var priceBar = pPct != null
+    ? '<div class="zone-price ' + (zone==='buy'?'in-buy':zone==='range'?'in-range':'above') + '" style="left:' + Math.min(pPct,103) + '%"></div>'
+    : '';
+
+  var ccy = (row.currency || lp && lp.ccy || 'USD').toUpperCase();
+  var fmt = function(n) {
+    if (!n) return '—';
+    return ccy==='GBP'?'£'+n.toFixed(0):ccy==='GBX'?n.toFixed(0)+'p':ccy==='EUR'?'€'+n.toFixed(0):ccy==='SEK'?'SEK'+n.toFixed(0):'$'+n.toFixed(0);
+  };
+
+  var priceLbl = p > 0
+    ? '<span style="color:' + (zone==='buy'?'var(--green)':zone==='range'?'var(--amber)':'var(--red)') + '; font-weight:700">' + fmt(p) + '</span>'
+    : '<span style="color:var(--text-dim)">no price</span>';
+
+  return '<div class="zone-wrap">' +
+    '<div class="zone-label">Valuation Zone &mdash; ' + priceLbl + '</div>' +
+    '<div class="zone-bar">' +
+      '<div class="zone-buy" style="left:' + blPct + '%;width:' + (bhPct-blPct) + '%"></div>' +
+      '<div class="zone-thesis" style="left:' + ftPct + '%"></div>' +
+      priceBar +
+    '</div>' +
+    '<div class="zone-legend">' +
+      '<span><span style="display:inline-block;width:8px;height:4px;background:rgba(46,204,113,0.35);border-radius:2px"></span> Buy ' + fmt(bl) + '&ndash;' + fmt(bh) + '</span>' +
+      '<span><span style="display:inline-block;width:3px;height:8px;background:var(--accent);border-radius:1px;vertical-align:middle"></span> Full thesis ' + fmt(ft) + '</span>' +
+    '</div>' +
+  '</div>';
+}
+
+// Build sparkline from log
+function buildSparkline(ticker) {
+  var log = tickerLog(ticker);
+  if (log.length === 0) return '';
+  var scores = log.map(function(r){ return parseInt(r.score||0); });
+  var mn = Math.min.apply(null, scores) - 5;
+  var mx = Math.max.apply(null, scores) + 5;
+  var range = mx - mn || 1;
+  var dots = scores.map(function(s,i) {
+    var h = Math.max(3, Math.round(((s-mn)/range)*24)) + 'px';
+    var col = s>=80?'var(--green)':s>=60?'var(--accent)':s>=40?'var(--amber)':'var(--red)';
+    var d = log[i];
+    return '<div class="hist-dot" style="height:'+h+';background:'+col+'" data-tip="'+s+' · '+d.date+'"></div>';
+  }).join('');
+  return '<div class="score-history"><div class="hist-label">Score history ('+scores.length+' entries)</div><div class="hist-dots">'+dots+'</div></div>';
+}
+
+// Render a single score card
+function buildScoreCard(row) {
+  var alerts = detectAlerts(row);
+  var cur    = parseInt(row.score || 0);
+  var tier   = scoreTier(cur);
+  var zone   = priceZoneStatus(row);
+
+  // Card alert class
+  var alertCls = '';
+  if (Math.abs(alerts.totalDelta) >= 5)       alertCls = 'alert-total';
+  else if (alerts.dimAlerts.length > 0)        alertCls = 'alert-dim';
+
+  // Delta badge
+  var deltaBadge = '';
+  if (alerts.prevScore != null) {
+    var d = alerts.totalDelta;
+    var cls = d > 0 ? 'up' : d < 0 ? 'down' : 'flat';
+    var sym = d > 0 ? '+' : '';
+    deltaBadge = '<span class="score-delta '+cls+'">'+sym+d+'</span>';
+  }
+
+  // Price zone badge
+  var zoneBadge = zone
+    ? '<span class="price-zone-status ' + (zone==='buy'?'pz-buy':zone==='range'?'pz-range':'pz-above') + '">' +
+      (zone==='buy'?'BUY ZONE':zone==='range'?'IN RANGE':'ABOVE THESIS') + '</span>'
+    : '<span class="price-zone-status pz-none">NO PRICES</span>';
+
+  // Dimension bars
+  var prevDims = {};
+  var log = tickerLog(row.ticker);
+  if (log.length > 0) {
+    var last = log[log.length-1];
+    DIMS.forEach(function(d){ prevDims[d.key] = parseInt(last[d.key]||0); });
+  }
+  var dimBars = DIMS.map(function(d) {
+    var val  = parseInt(row[d.key] || 0);
+    var prev = prevDims[d.key] || 0;
+    var dd   = prev ? val - prev : 0;
+    var ddStr = dd !== 0 ? '<span class="dim-delta" style="color:' + (dd>0?'var(--green)':dd<0?'var(--red)':'var(--text-dim)') + '">' + (dd>0?'+':'') + dd + '</span>' : '<span class="dim-delta"></span>';
+    var alertDim = prev && Math.abs(dd) >= 10 ? ' style="box-shadow:0 0 6px ' + (dd>0?'var(--green)':'var(--red)') + '"' : '';
+    return '<div class="dim-row">' +
+      '<span class="dim-label">' + d.label + '</span>' +
+      '<div class="dim-track"' + alertDim + '><div class="dim-fill" style="width:'+val+'%;background:'+d.color+';opacity:0.8"></div></div>' +
+      '<span class="dim-val">' + (val||'—') + '</span>' +
+      ddStr +
+    '</div>';
+  }).join('');
+
+  // Dim alerts list
+  var dimAlertHtml = '';
+  if (alerts.dimAlerts.length > 0) {
+    dimAlertHtml = '<div style="font-size:10px;color:var(--amber);margin-bottom:6px">' +
+      alerts.dimAlerts.map(function(a){ return '⚠️ '+a.dim+' ' + (a.delta>0?'+':'')+a.delta; }).join(' &nbsp; ') +
+    '</div>';
+  }
+
+  // Change note
+  var noteHtml = row.change_note
+    ? '<div class="change-note">📝 ' + row.change_note + '</div>'
+    : '';
+
+  // Layer lookup
+  var all = [].concat(portfolioData.sipp, portfolioData.isa);
+  var holding = all.find(function(h){ return (h.ticker||'').toUpperCase() === (row.ticker||'').toUpperCase(); });
+  var layerStr = holding ? '<div style="font-size:10px;color:var(--text-dim);margin-top:1px">' + holding.layer + '</div>' : '';
+
+  return '<div class="score-card '+alertCls+'" data-ticker="'+row.ticker+'" data-score="'+cur+'" data-zone="'+(zone||'none')+'" data-alert="'+alertCls+'">' +
+    '<div class="score-card-header">' +
+      '<div>' +
+        '<div class="score-ticker">' + row.ticker + deltaBadge + '</div>' +
+        '<div class="score-name">' + (row.name || (holding&&holding.name) || '') + '</div>' +
+        layerStr +
+      '</div>' +
+      '<div style="text-align:right">' +
+        '<div class="score-badge ' + tier.cls + '">' + cur + '</div>' +
+        '<div style="font-size:9px;font-weight:700;letter-spacing:0.08em;color:var(--text-dim);margin-top:2px">' + tier.label + '</div>' +
+      '</div>' +
+    '</div>' +
+    zoneBadge + '<span style="margin-left:8px"></span>' +
+    (row.score_date ? '<span style="font-size:10px;color:var(--text-dim)">Scored ' + row.score_date + '</span>' : '') +
+    '<div style="margin:10px 0 8px;"><div class="dim-bars">' + dimBars + '</div></div>' +
+    dimAlertHtml +
+    buildZoneBar(row) +
+    buildSparkline(row.ticker) +
+    noteHtml +
+  '</div>';
+}
+
+function renderScores() {
+  var scores = scoresData.scores;
+  var grid = document.getElementById('scoresGrid');
+  if (!grid) return;
+
+  if (!scores || scores.length === 0) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--text-dim);font-size:12px;padding:40px 0">' +
+      'Add a <code style="color:var(--accent)">SCORES</code> tab to your Google Sheet and publish it.<br>' +
+      'Columns: <code style="color:var(--accent)">ticker | score | score_date | substrate | demand | moat | valuation | mgmt | buy_low | buy_high | full_thesis | currency | change_note</code>' +
+    '</div>';
+    document.getElementById('scCountTotal') && (document.getElementById('scCountTotal').textContent = '0');
+    return;
+  }
+
+  // Compute summary stats
+  var alertCount = scores.filter(function(r){
+    var a = detectAlerts(r);
+    return Math.abs(a.totalDelta) >= 5 || a.dimAlerts.length > 0;
+  }).length;
+  var buyCount = scores.filter(function(r){ return priceZoneStatus(r) === 'buy'; }).length;
+
+  document.getElementById('scCountTotal') && (document.getElementById('scCountTotal').textContent = scores.length);
+  document.getElementById('scCountAlerts') && (document.getElementById('scCountAlerts').textContent = alertCount > 0 ? alertCount : '—');
+  document.getElementById('scCountBuy') && (document.getElementById('scCountBuy').textContent = buyCount > 0 ? buyCount : '—');
+
+  // Alert banner
+  var alertBanner = '';
+  var bigAlerts = scores.filter(function(r){
+    var a = detectAlerts(r); return Math.abs(a.totalDelta) >= 5;
+  });
+  if (bigAlerts.length > 0) {
+    alertBanner += '<div class="alert-banner">' +
+      '<strong>⚠️ Score changes require review:</strong> ' +
+      bigAlerts.map(function(r){
+        var a = detectAlerts(r);
+        return r.ticker + ' ' + (a.totalDelta>0?'+':'') + a.totalDelta;
+      }).join(', ') +
+    '</div>';
+  }
+  var aboveThesis = scores.filter(function(r){ return priceZoneStatus(r) === 'above'; });
+  if (aboveThesis.length > 0) {
+    alertBanner += '<div class="alert-banner amber">' +
+      '<strong>🔴 Above full thesis:</strong> ' +
+      aboveThesis.map(function(r){ return r.ticker; }).join(', ') +
+      ' — reclassification may be fully priced in. Review position sizing.' +
+    '</div>';
+  }
+  var alertsEl = document.getElementById('scoresAlerts');
+  if (alertsEl) alertsEl.innerHTML = alertBanner;
+
+  // Sort: alerts first, then by score descending
+  var sorted = scores.slice().sort(function(a,b) {
+    var aa = detectAlerts(a); var ab = detectAlerts(b);
+    var scoreA = (Math.abs(aa.totalDelta)>=5||aa.dimAlerts.length>0) ? 1 : 0;
+    var scoreB = (Math.abs(ab.totalDelta)>=5||ab.dimAlerts.length>0) ? 1 : 0;
+    if (scoreB !== scoreA) return scoreB - scoreA;
+    return parseInt(b.score||0) - parseInt(a.score||0);
+  });
+
+  grid.innerHTML = sorted.map(buildScoreCard).join('');
+  currentScoreFilter = 'all';
+}
+
+var currentScoreFilter = 'all';
+function filterScores(filter, btn) {
+  document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+  currentScoreFilter = filter;
+  var cards = document.querySelectorAll('.score-card');
+  cards.forEach(function(card) {
+    var show = true;
+    var score  = parseInt(card.dataset.score || 0);
+    var zone   = card.dataset.zone;
+    var alert  = card.dataset.alert;
+    if (filter === 'alerts')    show = alert === 'alert-total' || alert === 'alert-dim';
+    if (filter === 'buy-zone')  show = zone === 'buy';
+    if (filter === 'core')      show = score >= 80;
+    if (filter === 'watch')     show = score < 70;
+    if (filter === 'above')     show = zone === 'above';
+    card.style.display = show ? '' : 'none';
+  });
+}
 
 const STELLAR_CTX="You are Stellar Intelligence, AI co-pilot for a GBP999k portfolio on the Stellar Hypothesis: own irreplaceable substrates enabling the next civilisational layer. Target 15-20% CAGR. SIPP 575k + ISA 424k.\n\nLAYERS+TARGETS: Compute 22pct (NVDA,TSM,ASML,AMAT,AVGO,ANET), Energy 15.3pct (CCJ,BWXT,ETN,NEE,VRT,SPUT,FLNC), Materials 12.6pct (FCX,MP,SLVP,SGLD), Biological 20.1pct CURRENTLY 15pct GAP (TWST,ILMN,MRNA,SDGR,RXRX), Sovereignty 10.4pct (RHM,RKLB,BWXT,ASTS,SYM), Robotics 9pct ZERO POSITION (Renishaw,Hexagon,Novanta,ROBG), Hedge 16pct (SGLD,SLVP,Winton,Ruffer).\n\nRISK CONTROLS: Top-5 max 35pct AUM. Hedge floor 12pct. Bio twin-risk ILMN+TWST 11pct WATCH. SGLD cap 10pct WATCH. Dry powder 5pct min.\n\nSIPP: CCJ 62737 +46.6pct HOLD, TWST 51882 +65.7pct HOLD, Winton 40242 HOLD, ANET 39134 REVIEW, BWXT 32559 HOLD, AVGO 31303 HOLD, ETN 31524 HOLD, NEE 30967 HOLD, TSM 31134 HOLD, NVDA 29060 SIZE-UP to 60k, MRNA 24370 HOLD, FLNC 21635 REVIEW, AMAT 20000 HOLD, SDGR 10000 HOLD, BNTX 17997 EXIT, RXRX 6692 TRIM, LUNR 13449 EXIT, NVTS 10090 EXIT, INRG 10386 EXIT, Ruffer 7060 HOLD.\n\nISA: SGLD 87791 CAP, ASML 58130 HOLD, VRT 42560 HOLD, FCX 40000 HOLD, RHM 30000 HOLD, MSFT 30020 HOLD, SPUT 27944 HOLD, RKLB 26922 HOLD, ILMN 29636 HOLD, MP 20000 HOLD, SLVP 22708 HOLD, LEU 17741 MONITOR, OKLO 15930 MONITOR, ASTS 9756 HOLD, RXRX 5444 TRIM, SYM 6667 WATCH, ISRG 6726 HOLD.\n\nWATCHLIST: Renishaw 3800-4300p BUY T1 NOW, Hexagon SEK85-99 BUY T1 NOW, Novanta 125-142 BUY T1 NOW, ROBG BUY NOW, GEV 600-650 WAIT, KTOS 60-70 WAIT, ABB 75-80 WAIT, CGNX 42 WAIT, RGEN 110-120 WAIT.\n\nDISRUPTION SCORES (100=existential): FCX copper 82, ASML EUV 71, Nuclear 65, ANET AI-infra 57, NEE utility 55, FLNC BESS 34.\n\nCOST CURVE THRESHOLDS AMBER/RED: Solar LCOE 20/15 per MWh. Battery 80/60 per kWh. DNA synth 0.04/0.02 per bp. Inference 0.50/0.10 per M tokens. Humanoid 50k/200k units per yr.\n\nSTRUCTURAL TRIGGERS: S1 China EUV flag ASML. S2 AI drug Phase3 flag SDGR+RXRX. S3 SSN(X) flag BWXT. S4 Kazatomprom flag CCJ+SPUT. S5 New uranium mine flag CCJ. S6 Fleet closures flag nuclear sleeve.\n\nWEEKLY CHECK: Search S&P Nasdaq VIX current levels, uranium spot (AMBER below 50), copper spot (AMBER below 3.50), any holding over 10pct weekly move. Compare against thresholds. RAG status output.\nMONTHLY: weekly plus bottom-3 rescore plus layer weights vs targets plus concentration plus hedge floor plus bio twin-risk.\nQUARTERLY: monthly plus all 5 cost curves plus all 6 structural triggers plus thesis validation per holding.\n\nSCORING: 80-100 Core conviction 4-7pct AUM. 60-79 Hold 2-4pct. 40-59 Reduce max 2pct. Under 40 Exit.\n\n12 GOLDEN RULES: 1.Thesis is substrate not story. 2.Winners deserve more capital. 3.Losers need reason to stay. 4.Concentration fine without understanding not. 5.Bubbles kill returns. 6.Dry powder is a position. 7.IPOs watch 6-12 months. 8.Review worst monthly. 9.Themes consensus substrate test not. 10.Size matches conviction. 11.Test substrate not story. 12.Reclassification is where returns are.\n\nSUBSTRATE TEST: Is this the thing without which the next layer cannot be built? Applications, services, beneficiaries all fail. Be direct, decisive, structured. British spelling. No filler. Recommend not explore.";
 function launchClaude(cmd){
