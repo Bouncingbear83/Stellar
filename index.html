@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>STELLAR — Portfolio Command</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@300;400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -12,7 +13,7 @@
    Cormorant Garamond · Syne · DM Mono
    ═══════════════════════════════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@300;400&family=Syne:wght@400;600;700;800&display=swap');
+
 
 :root {
   --void:          #04040A;
@@ -65,30 +66,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Noise overlay — brand spec */
-body::before {
-  content: '';
-  position: fixed; inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events: none; z-index: 1000; opacity: 0.6;
-}
 
-/* Star field */
-body::after {
-  content: '';
-  position: fixed; inset: 0;
-  background-image:
-    radial-gradient(1px 1px at 12% 18%, rgba(238,232,216,0.35) 0%, transparent 100%),
-    radial-gradient(1px 1px at 28% 55%, rgba(238,232,216,0.20) 0%, transparent 100%),
-    radial-gradient(1px 1px at 44% 30%, rgba(238,232,216,0.25) 0%, transparent 100%),
-    radial-gradient(1px 1px at 67% 72%, rgba(238,232,216,0.18) 0%, transparent 100%),
-    radial-gradient(1px 1px at 80% 20%, rgba(238,232,216,0.30) 0%, transparent 100%),
-    radial-gradient(1px 1px at 91% 48%, rgba(238,232,216,0.22) 0%, transparent 100%),
-    radial-gradient(2px 2px at 73% 10%, rgba(200,169,110,0.28) 0%, transparent 100%),
-    radial-gradient(1px 1px at 35% 88%, rgba(238,232,216,0.18) 0%, transparent 100%),
-    radial-gradient(1px 1px at  6% 65%, rgba(238,232,216,0.20) 0%, transparent 100%);
-  pointer-events: none; z-index: 0;
-}
+
+
+
 
 /* ── HEADER ──────────────────────────────────────────────────────────────── */
 header {
@@ -161,9 +142,9 @@ header {
 }
 
 /* ── LAYOUT ──────────────────────────────────────────────────────────────── */
-.app { position: relative; z-index: 1; }
+.app {}
 
-.container { max-width: 1280px; margin: 0 auto; padding: 0 40px 80px; }
+.container { max-width: 1280px; margin: 0 auto; padding: 0 40px 80px; position: relative; z-index: 2; }
 
 /* ── TAB NAVIGATION ──────────────────────────────────────────────────────── */
 .tab-nav {
@@ -186,8 +167,7 @@ header {
 .tab:hover { color: var(--text-mid); }
 .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
 
-.tab-content { display: none; }
-.tab-content.active { display: block; }
+ /* JS overrides via inline style */
 
 /* ── CARDS ───────────────────────────────────────────────────────────────── */
 .card {
@@ -732,7 +712,6 @@ tr:hover td { color: var(--text); }
 /* ── SCORE SUMMARY METRICS — override for scores tab ────────────────────── */
 #scCountTotal, #scCountAlerts, #scCountBuy { font-size:40px; }
 
-
   /* ── TRIGGER-ROW (used by disruption + cost curve sections) ── */
   .trigger-row {
     display: flex; align-items: flex-start; justify-content: space-between;
@@ -759,13 +738,18 @@ tr:hover td { color: var(--text); }
   .rule-num { font-family: var(--font-mono); font-size: 10px; color: var(--gold); min-width: 18px; flex-shrink: 0; }
   .rule-text { font-family: var(--font-display); font-size: 15px; font-weight: 300; font-style: italic; color: var(--text-mid); line-height: 1.5; }
 
+/* Override: all tab panels visible by default — JS will hide them */
+
+/* Tab visibility — single source of truth */
+/* ── TAB VISIBILITY — must be last, no !important ── */
+
+.tab-content { display: none; }
+.tab-content.shown { display: block; }
 </style>
 </head>
 <body>
 <div class="app">
-  <!-- ── API KEY MODAL ── -->
-
-  <header>
+<header>
     <div class="logo"><em>Stellar</em><span class="logo-wordmark">Command</span></div>
     <div class="header-right">
       <div class="aum-display">AUM <span id="aumValue">~£999k</span></div>
@@ -775,32 +759,26 @@ tr:hover td { color: var(--text); }
       <div class="status-dot" title="System live"></div>
     </div>
   </header>
-
   <div class="container">
-
-    <!-- NAV TABS -->
     <div class="tab-nav">
-      <button class="tab active" onclick="switchTab('command')">Command</button>
-      <button class="tab" onclick="switchTab('monitor')">Monitor</button>
-      <button class="tab" onclick="switchTab('watchlist')">Watchlist</button>
-      <button class="tab" onclick="switchTab('layers')">Layers</button>
-      <button class="tab" onclick="switchTab('scores')">Scores</button>
-      <button class="tab" onclick="switchTab('returns')">Returns</button>
-      <button class="tab" onclick="switchTab('holdings')">Holdings</button>
+      <button class="tab active" onclick="showTab('command',this)">Command</button>
+      <button class="tab" onclick="showTab('monitor',this)">Monitor</button>
+      <button class="tab" onclick="showTab('watchlist',this)">Watchlist</button>
+      <button class="tab" onclick="showTab('layers',this)">Layers</button>
+      <button class="tab" onclick="showTab('scores',this)">Scores</button>
+      <button class="tab" onclick="showTab('returns',this)">Returns</button>
+      <button class="tab" onclick="showTab('holdings',this)">Holdings</button>
     </div>
 
-    <!-- ══════════════════════════════════════════ -->
-    <!-- TAB: COMMAND (AI Chat)                     -->
-    <!-- ══════════════════════════════════════════ -->
-    <div id="tab-command" class="tab-content active">
-      <div class="grid-2" style="gap:16px; align-items:start;">
+    <div id="tab-command" class="tab-content shown">
+<div class="grid-2" style="gap:16px; align-items:start;">
 
         <div class="card" style="grid-column: 1 / 2;">
           <div class="card-header">
             <span class="card-title">Stellar Intelligence</span>
             <span class="rag rag-green"></span>
           </div>
-          <div style="padding:20px; display:flex; flex-direction:column; gap:14px;">
+          <div style="padding:0; display:flex; flex-direction:column;">
             <div class="launch-hero">
               <div class="launch-hero-eyebrow">Stellar Intelligence</div>
               <div class="launch-hero-title">One layer <em>deeper</em>.</div>
@@ -811,13 +789,19 @@ tr:hover td { color: var(--text); }
             </div>
             <div class="launch-section-label">Quick Commands</div>
             <div class="launch-grid">
-            <div style="font-family:var(--font-ui); font-size:10px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-dim);">Custom</div>
-            <div style="display:flex; gap:8px;">
+              <button class="launch-btn" onclick="launchClaude(this.dataset.q)" data-q="weekly check">Weekly check</button>
+              <button class="launch-btn" onclick="launchClaude(this.dataset.q)" data-q="monthly review">Monthly review</button>
+              <button class="launch-btn" onclick="launchClaude(this.dataset.q)" data-q="quarterly review">Quarterly review</button>
+              <button class="launch-btn" onclick="launchClaude(this.dataset.q)" data-q="Run the substrate test on all holdings">Substrate audit</button>
+              <button class="launch-btn" onclick="launchClaude(this.dataset.q)" data-q="What are the current layer gaps and how do I close them?">Layer gaps</button>
+              <button class="launch-btn" onclick="launchClaude(this.dataset.q)" data-q="Which holdings are at risk of reclassification being complete?">Reclassification risk</button>
+            </div>
+            <div class="custom-prompt-wrap">
               <textarea class="cprompt" id="cprompt" placeholder="e.g. ASML dropped 12%, what do I do?  ·  Score Prysmian against the framework  ·  Should I add to NVDA now?"
                 onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();launchClaude(this.value.trim())}"></textarea>
               <button class="cgo" onclick="launchClaude(document.getElementById('cprompt').value.trim())">GO →</button>
             </div>
-          </div>
+          </div></div>
         </div>
         <!-- Right column: risk controls + golden rules -->
         <div style="display:flex; flex-direction:column; gap:16px;">
@@ -1039,8 +1023,20 @@ tr:hover td { color: var(--text); }
     <!-- ══════════════════════════════════════════ -->
     <!-- TAB: MONITOR                              -->
     <!-- ══════════════════════════════════════════ -->
+    <div
+    </div>
+
+    <div
+    </div>
+
+    <div
+    </div>
+
+    <div
+    </div>
+
     <div id="tab-monitor" class="tab-content">
-      <div class="grid-2">
+<div class="grid-2">
 
         <div class="card">
           <div class="card-header">
@@ -1171,8 +1167,20 @@ tr:hover td { color: var(--text); }
     <!-- ══════════════════════════════════════════ -->
     <!-- TAB: WATCHLIST                             -->
     <!-- ══════════════════════════════════════════ -->
+    <div
+    </div>
+
+    <div
+    </div>
+
+    <div
+    </div>
+
+    <div
+    </div>
+
     <div id="tab-watchlist" class="tab-content">
-      <div class="grid-2">
+<div class="grid-2">
 
         <div class="card full-width">
           <div class="card-header">
@@ -1370,8 +1378,20 @@ tr:hover td { color: var(--text); }
     <!-- ══════════════════════════════════════════ -->
     <!-- TAB: LAYERS                               -->
     <!-- ══════════════════════════════════════════ -->
+    <div
+    </div>
+
+    <div
+    </div>
+
+    <div
+    </div>
+
+    <div
+    </div>
+
     <div id="tab-layers" class="tab-content">
-      <div class="grid-2">
+<div class="grid-2">
 
         <div class="card">
           <div class="card-header">
@@ -1506,8 +1526,20 @@ tr:hover td { color: var(--text); }
     <!-- ══════════════════════════════════════════ -->
     <!-- TAB: HOLDINGS                             -->
     <!-- ══════════════════════════════════════════ -->
+    <div
+    </div>
+
+    <div
+    </div>
+
+    <div
+    </div>
+
+    <div
+    </div>
+
     <div id="tab-holdings" class="tab-content">
-      <div style="display:flex; flex-direction:column; gap:16px;">
+<div style="display:flex; flex-direction:column; gap:16px;">
 
         <div class="card">
           <div class="card-header">
@@ -1562,9 +1594,20 @@ tr:hover td { color: var(--text); }
     <!-- ══════════════════════════════════════════ -->
     <!-- TAB: RETURNS                              -->
     <!-- ══════════════════════════════════════════ -->
-    <div id="tab-returns" class="tab-content">
+    <div
+    </div>
 
-      <!-- Row 1: Top-level P&L metrics -->
+    <div
+    </div>
+
+    <div
+    </div>
+
+    <div
+    </div>
+
+    <div id="tab-returns" class="tab-content">
+<!-- Row 1: Top-level P&L metrics -->
       <div class="returns-grid" id="returnsTopRow">
         <div class="metric-card">
           <div class="metric-label">Total Portfolio Value</div>
@@ -1722,9 +1765,20 @@ tr:hover td { color: var(--text); }
     <!-- ══════════════════════════════════════════ -->
     <!-- TAB: SCORES                               -->
     <!-- ══════════════════════════════════════════ -->
-    <div id="tab-scores" class="tab-content">
+    <div
+    </div>
 
-      <!-- Alerts banner -->
+    <div
+    </div>
+
+    <div
+    </div>
+
+    <div
+    </div>
+
+    <div id="tab-scores" class="tab-content">
+<!-- Alerts banner -->
       <div class="scores-alerts" id="scoresAlerts"></div>
 
       <!-- Summary strip -->
@@ -1768,19 +1822,50 @@ tr:hover td { color: var(--text); }
 
   </div>
 </div>
+    </div>
 
+  </div>
+</div>
+    </div>
+
+  </div>
+</div>
+    </div>
+
+  </div>
+</div>
+    </div>
+
+  </div>
+</div>
 <script>
+function showTab(name, btn) {
+  var panels = document.getElementsByClassName('tab-content');
+  for (var i = 0; i < panels.length; i++) { panels[i].classList.remove('shown'); }
+  var btns = document.getElementsByClassName('tab');
+  for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('active'); }
+  var panel = document.getElementById('tab-' + name);
+  if (panel) panel.classList.add('shown');
+  if (btn) btn.classList.add('active');
+}
+
+
+// ── TAB SWITCHING ─────────────────────────────────────────────────────────────
+function showTab(name, btn) {
+  var panels = document.getElementsByClassName('tab-content');
+  for (var i = 0; i < panels.length; i++) { panels[i].classList.remove('shown'); }
+  var btns = document.getElementsByClassName('tab');
+  for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('active'); }
+  var panel = document.getElementById('tab-' + name);
+  if (panel) panel.classList.add('shown');
+  if (btn) btn.classList.add('active');
+}
+
+
 // ══════════════════════════════════════
 // TAB SWITCHING
 // ══════════════════════════════════════
-function switchTab(name) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  var btn = document.querySelector('.tab[onclick*="' + name + '"]');
-  if (btn) btn.classList.add('active');
-  var panel = document.getElementById('tab-' + name);
-  if (panel) panel.classList.add('active');
-}
+// switchTab replaced by showTab above
 
 // ══════════════════════════════════════
 // LAYER WEIGHT BARS
@@ -1844,12 +1929,12 @@ const FALLBACK_ISA = [
 ];
 
 const FALLBACK_LAYERS = [
-  { name: 'Compute',    target: 22.0, current: 21.0, color: '#6E8EC8' },
+  { name: 'Compute',    target: 22.0, current: 21.0, color: '#4f7fff' },
   { name: 'Energy',     target: 15.3, current: 16.1, color: '#f39c12' },
   { name: 'Materials',  target: 12.6, current: 13.2, color: '#e67e22' },
-  { name: 'Biological', target: 20.1, current: 15.2, color: '#5ABFA0' },
+  { name: 'Biological', target: 20.1, current: 15.2, color: '#2ecc71' },
   { name: 'Sovereignty',target: 10.4, current: 10.8, color: '#9b59b6' },
-  { name: 'Robotics',   target:  9.0, current:  0.0, color: '#C8925A' },
+  { name: 'Robotics',   target:  9.0, current:  0.0, color: '#e74c3c' },
   { name: 'Hedge',      target: 16.0, current: 15.8, color: '#95a5a6' },
 ];
 
@@ -1891,8 +1976,8 @@ function csvToHoldings(rows) {
 }
 
 function csvToLayers(rows) {
-  const colorMap = { Compute:'#6E8EC8', Energy:'#C8A96E', Materials:'#C8925A',
-                     Biological:'#5ABFA0', Sovereignty:'#C8925A', Robotics:'#C8A96E', Hedge:'#7A6540' };
+  const colorMap = { Compute:'#4f7fff', Energy:'#f39c12', Materials:'#e67e22',
+                     Biological:'#2ecc71', Sovereignty:'#9b59b6', Robotics:'#e74c3c', Hedge:'#95a5a6' };
   return rows.map(r => ({
     name:    r.name || '',
     target:  parseFloat(r.target_pct || r.target || 0),
@@ -2534,8 +2619,8 @@ var scoresData = {
 
 // Dimension config: key, label, weight, colour
 var DIMS = [
-  { key:'substrate', label:'Substrate', weight:30, color:'#6E8EC8' },
-  { key:'demand',    label:'Demand',    weight:25, color:'#5ABFA0' },
+  { key:'substrate', label:'Substrate', weight:30, color:'#4f7fff' },
+  { key:'demand',    label:'Demand',    weight:25, color:'#2ecc71' },
   { key:'moat',      label:'Moat',      weight:20, color:'#9b59b6' },
   { key:'valuation', label:'Valuation', weight:15, color:'#f39c12' },
   { key:'mgmt',      label:'Mgmt',      weight:10, color:'#1abc9c' },
@@ -2853,6 +2938,34 @@ function launchClaude(cmd){
   });
   window.open("https://claude.ai/new","_blank");
 }
+
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded", function() {
+  renderAll();
+  // Only sync if NOT running inside Claude artifact sandbox (CSP blocks all fetches there)
+  var inSandbox = (window.location.protocol === 'about:' || 
+                   window.location.href.indexOf('claude.ai') !== -1 ||
+                   document.referrer.indexOf('claude.ai') !== -1);
+  if (!inSandbox) {
+    syncFromSheets().catch(function() {});
+  } else {
+    updateSyncBadge(null, 'Built-in data · Push to GitHub for live sync');
+  }
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  renderAll();
+  var inSandbox = (window.location.protocol === 'about:' ||
+                   window.location.href.indexOf('claude.ai') !== -1 ||
+                   document.referrer.indexOf('claude.ai') !== -1);
+  if (!inSandbox) {
+    syncFromSheets().catch(function() {});
+  } else {
+    updateSyncBadge(null, 'Built-in data · Push to GitHub for live sync');
+  }
+});
 </script>
 </body>
 </html>
